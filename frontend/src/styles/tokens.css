@@ -1,0 +1,20 @@
+:root {
+  --primary: #05620C;
+  --primary-dark: #034A09;
+  --primary-light: #E8F4E9;
+
+  --accent: #FF883E;
+  --accent-light: #FFF0E8;
+
+  --white: #FFFFFF;
+  --text: #1F2937;
+  --muted: #6B7280;
+  --background: #F8FAF8;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+}

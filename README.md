@@ -8,9 +8,33 @@ Internship project for collaborative development by three interns.
 - Backend: Node.js + Express
 - Database: MySQL
 
+## Getting started
+
+Requires [Node.js](https://nodejs.org/) (LTS) and, later, MySQL.
+
+```powershell
+copy .env.example .env
+npm install
+npm install --prefix frontend
+npm install --prefix backend
+npm run dev
+```
+
+- Frontend: http://localhost:5173
+- API health: http://localhost:3000/api/health
+
+Fill `DB_USER` and `DB_PASSWORD` in `.env` when you connect MySQL. Do not commit `.env`.
+
+Run apps separately if you prefer:
+
+```powershell
+npm run dev:frontend
+npm run dev:backend
+```
+
 ## Status
 
-This repository currently contains the **project folder structure and Git branches only**. Features, APIs, authentication, database tables, and React UI have not been implemented yet.
+The React (Vite) frontend and Express API are scaffolded and can be started locally. Features, authentication, and database tables are not implemented yet.
 
 ## Branching
 
