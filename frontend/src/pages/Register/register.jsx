@@ -35,7 +35,7 @@ export default function RegisterPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center px-6 py-12"
-      style={{ background: "#E8F4E15" }}
+      style={{ background: "#E8F4E9" }}
     >
       <div className="w-full max-w-lg">
         <div className="flex justify-center mb-8">
@@ -104,7 +104,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-lg text-white font-medium bg-[#FF883E] hover:opacity-90 transition disabled:opacity-60 shadow-sm"
+              className="w-full py-2.5 rounded-lg text-white font-medium bg-[#05620C] hover:opacity-90 transition disabled:opacity-60 shadow-sm"
             >
               {loading ? "Creating account..." : "Register"}
             </button>
