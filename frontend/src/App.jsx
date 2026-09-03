@@ -1,41 +1,16 @@
-import { useEffect, useState } from "react";
-import "./styles/tokens.css";
-import "./App.css";
+import{Routes,Route} from "react-router-dom"
+import LandingPage from "./pages/Landing/LandingPage";
+import LoginPage from "./pages/Login/login";
+import RegisterPage from "./pages/Register/register"
 
 function App() {
-  const [apiStatus, setApiStatus] = useState("Checking API...");
+  return(
+  <Routes>
+     <Route path="/" element={<LandingPage />} />
+     <Route path="/login" element={<LoginPage />} />
+     <Route path="/register" element={<RegisterPage />} />
 
-  useEffect(() => {
-    fetch("/api/health")
-      .then((res) => res.json())
-      .then((data) => {
-        setApiStatus(data.ok ? "API is running." : "API responded unexpectedly.");
-      })
-      .catch(() => {
-        setApiStatus("API is not reachable. Start the backend on port 3000.");
-      });
-  }, []);
-
-  return (
-    <main className="app">
-      <section className="card">
-        <h1 className="brand">
-          Tekniafrica <span>SOLUTIONS</span>
-        </h1>
-        <p className="lead">Task Management System</p>
-        <div className="actions">
-          <button type="button" className="btn btn-primary">
-            Primary action
-          </button>
-          <button type="button" className="btn btn-accent">
-            Secondary action
-          </button>
-        </div>
-        <p className={`status${apiStatus.includes("not reachable") ? " error" : ""}`}>
-          {apiStatus}
-        </p>
-      </section>
-    </main>
+     </Routes>
   );
 }
 
