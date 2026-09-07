@@ -18,7 +18,16 @@ export default function LoginPage() {
       const data = await loginUser({ email, password });
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/dashboard");
+
+      //Redirect based on role
+      if(data.user.role==="Member"){
+      navigate("/user/Dashboard");
+      } else if(data.user.role==="Admin"){
+        navigate("/admin/dashboard");
+      }
+      else if(data.user.role==="SuperAdmin"){
+        navigate("/superadmin/dashboard");
+      }
     } catch (err) {
       setError(err.message);
     } finally {

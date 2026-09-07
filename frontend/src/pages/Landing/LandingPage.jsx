@@ -170,7 +170,6 @@ export default function LandingPage() {
     </p>
 
     <div className="relative">
-      {/* Connector line — only visible from md breakpoint up, sits behind the circles */}
       <div
         className="hidden md:block absolute top-6 left-0 w-full h-0.5"
         style={{ background: "#E8F4E9" }}
@@ -179,7 +178,6 @@ export default function LandingPage() {
       <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 relative">
         {steps.map((s, i) => (
           <div key={i} className="relative">
-            {/* Step number circle — sits on top of the connector line */}
             <div
               className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white mb-5 shadow-sm"
               style={{ background: "#05620C" }}
@@ -187,7 +185,6 @@ export default function LandingPage() {
               {i + 1}
             </div>
 
-            {/* Card */}
             <div className="bg-white rounded-xl border border-black/5 shadow-sm p-5 transition-shadow hover:shadow-md">
               <h3 className="font-display font-semibold text-base mb-1.5">{s.title}</h3>
               <p className="text-sm" style={{ color: "#6B7280" }}>{s.desc}</p>
