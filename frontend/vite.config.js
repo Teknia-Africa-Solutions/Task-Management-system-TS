@@ -9,4 +9,12 @@ export default defineConfig({
       "/api": "http://localhost:3000",
     },
   },
+  optimizeDeps: {
+    include: ['jspdf', 'jspdf-autotable']
+  },
+  build: {
+    commonjsOptions: {
+      include: [/jspdf/, /jspdf-autotable/]
+    }
+  }
 });

@@ -9,5 +9,14 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
+    "lucide-react": "^1.38.0",
+    "react-icons": "^5.7.0",
+    "react-router-dom": "^7.18.3",
+    "recharts": "^3.10.1"
   }
 }
