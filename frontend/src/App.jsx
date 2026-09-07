@@ -11,32 +11,38 @@ import Reports from "./pages/user/Reports";
 import Files from "./pages/user/Files";
 import Messages from "./pages/user/Messages";
 import Calendar from "./pages/user/Calendar";
-import  Notifications from "./pages/user/Notifications";
+import Notifications from "./pages/user/Notifications";
 import ViewProfile from "./pages/user/ViewProfile";
 import AccountSettings from "./pages/user/AccountSettings";
 import NotificationPreferences from "./pages/user/NotificationPreferences.jsx";
+// ✅ ADD YOUR ADMIN IMPORT
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
     <Routes>
+      {/* Public routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
+      {/* User routes */}
       <Route path="/user" element={<UserLayout />}>
         <Route path={USER_ROUTES.dashboard} element={<Dashboard />} />
         <Route path={USER_ROUTES.myTasks} element={<MyTasks />} />
         <Route path={USER_ROUTES.projects} element={<Projects />} />
-        <Route path={USER_ROUTES.reports} element={<Reports/>}/>
-        <Route path={USER_ROUTES.files} element={<Files/>}/>
-        <Route path={USER_ROUTES.messages} element={<Messages/>}/>
-        <Route path={USER_ROUTES.calendar} element={<Calendar/>}/>
-        <Route path={USER_ROUTES.notifications} element={<Notifications/>}/>
-        <Route path={USER_ROUTES.viewProfile} element={<ViewProfile/>}/>
-        <Route path={USER_ROUTES.accountSettings} element={<AccountSettings/>}/>
-        <Route path={USER_ROUTES.notificationPreferences} element={<NotificationPreferences/>}/>
-
+        <Route path={USER_ROUTES.reports} element={<Reports />} />
+        <Route path={USER_ROUTES.files} element={<Files />} />
+        <Route path={USER_ROUTES.messages} element={<Messages />} />
+        <Route path={USER_ROUTES.calendar} element={<Calendar />} />
+        <Route path={USER_ROUTES.notifications} element={<Notifications />} />
+        <Route path={USER_ROUTES.viewProfile} element={<ViewProfile />} />
+        <Route path={USER_ROUTES.accountSettings} element={<AccountSettings />} />
+        <Route path={USER_ROUTES.notificationPreferences} element={<NotificationPreferences />} />
       </Route>
+
+      {/* ✅ ADMIN ROUTE - ADDED */}
+      <Route path="/admin/*" element={<AdminDashboard />} />
     </Routes>
   );
 }
