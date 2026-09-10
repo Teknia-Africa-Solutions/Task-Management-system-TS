@@ -1,13 +1,5 @@
 import { useState } from "react";
-import { CheckSquare, MessageSquare, Calendar, AlertCircle } from "lucide-react"; // flagging: verify these exact names exist in your installed lucide-react
-
-const initialNotifications = [
-  { id: 1, type: "task", title: "New task assigned: UI Design for Dashboard", time: "10 min ago", read: false, icon: CheckSquare },
-  { id: 2, type: "message", title: "Jane Doe sent you a message", time: "1 hour ago", read: false, icon: MessageSquare },
-  { id: 3, type: "deadline", title: "Project Proposal is due tomorrow", time: "3 hours ago", read: false, icon: Calendar },
-  { id: 4, type: "alert", title: "Your task 'API Integration' was marked Blocked", time: "Yesterday", read: true, icon: AlertCircle },
-  { id: 5, type: "task", title: "Task 'Database Design' status changed to Todo", time: "2 days ago", read: true, icon: CheckSquare },
-];
+import { initialNotifications } from "../../data/mockData";
 
 const filters = ["All", "Unread", "Read"];
 

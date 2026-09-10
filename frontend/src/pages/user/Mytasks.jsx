@@ -1,12 +1,6 @@
 import { useState } from "react";
-import { Eye, CheckCircle2 } from "lucide-react"; // flagging: double-check these exact icon names exist in your installed lucide-react version
-
-const allTasks = [
-  { id: 1, title: "UI Design for Dashboard", priority: "High", status: "In Progress", category: "Design", due: "2026-05-21", assignee: "Jane Doe" },
-  { id: 2, title: "Database Design", priority: "Medium", status: "Todo", category: "Backend", due: "2026-05-23", assignee: "David Brown" },
-  { id: 3, title: "API Integration", priority: "Medium", status: "In Progress", category: "Backend", due: "2026-05-24", assignee: "Mike Johnson" },
-  { id: 4, title: "Project Documentation", priority: "Low", status: "Todo", category: "Docs", due: "2026-05-28", assignee: "Sarah Wilson" },
-];
+import { Eye, CheckCircle2 } from "lucide-react";
+import { allTasks } from "../../data/mockData";
 
 const filters = ["All", "Todo", "In Progress", "Review", "Done"];
 

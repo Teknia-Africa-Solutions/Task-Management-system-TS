@@ -39,7 +39,7 @@ export default function UserSidebar({ onClose }) {
         )}
       </div>
 
-      <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 py-2 space-y-4 overflow-y-auto">
         {navItems.map(({ label, to, icon: Icon }) => (
           <NavLink
             key={to}
