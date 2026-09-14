@@ -1,7 +1,15 @@
 import { useState } from "react";
+import { CheckSquare, MessageSquare, Calendar, AlertCircle } from "lucide-react";
 import { initialNotifications } from "../../data/mockData";
 
 const filters = ["All", "Unread", "Read"];
+
+const typeIcons = {
+  task: CheckSquare,
+  message: MessageSquare,
+  deadline: Calendar,
+  alert: AlertCircle,
+};
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState(initialNotifications);
@@ -10,7 +18,7 @@ export default function Notifications() {
   const visibleNotifications = notifications.filter((n) => {
     if (activeFilter === "Unread") return !n.read;
     if (activeFilter === "Read") return n.read;
-    return true; 
+    return true;
   });
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -55,7 +63,6 @@ export default function Notifications() {
         )}
       </div>
 
-      {/* Notification list */}
       <div className="bg-white border border-black/5 rounded-xl shadow-sm divide-y divide-black/5">
         {visibleNotifications.length === 0 ? (
           <p className="text-center text-sm text-[#6B7280] py-10">
@@ -63,7 +70,7 @@ export default function Notifications() {
           </p>
         ) : (
           visibleNotifications.map((n) => {
-            const Icon = n.icon;
+            const Icon = typeIcons[n.type] || AlertCircle; // fallback in case a type isn't mapped
             return (
               <button
                 key={n.id}

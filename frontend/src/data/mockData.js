@@ -66,3 +66,32 @@ export const initialFiles = [
   { id: 4, name: "API_Doc.pdf", size: "512 KB", uploadedBy: "Nova" },
   { id: 5, name: "Architecture.png", size: "4.3 MB", uploadedBy: "Brian" },
 ];
+
+ export const conversations = [
+  {
+    id: 1,
+    name: "Jane Doe",
+    status: "Online",
+    initials: "JD",
+    lastMessage: "Great! Can you share the prototype by EOD?",
+    time: "10:35 AM",
+    messages: [
+      { id: 1, from: "them", text: "Hey! How's the UI design coming along?", time: "10:30 AM" },
+      { id: 2, from: "me", text: "Almost done! Just finishing the dashboard layout.", time: "10:32 AM" },
+      { id: 3, from: "them", text: "Great! Can you share the prototype by EOD?", time: "10:35 AM" },
+    ],
+  },
+  {
+    id: 2,
+    name: "Mike Johnson",
+    status: "Offline",
+    initials: "MJ",
+    lastMessage: "Sounds good, thanks!",
+    time: "Yesterday",
+    messages: [
+      { id: 1, from: "them", text: "Can you review the API integration PR?", time: "Yesterday, 3:00 PM" },
+      { id: 2, from: "me", text: "Sure, I'll take a look this afternoon.", time: "Yesterday, 3:10 PM" },
+      { id: 3, from: "them", text: "Sounds good, thanks!", time: "Yesterday, 3:12 PM" },
+    ],
+  },
+];
