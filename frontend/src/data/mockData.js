@@ -58,4 +58,11 @@ export const events = {
   "2026-05-23": [{ title: "UI Design", color: "#C2610F" }],
 };
 
-// Mock data for sidebar
+// Mock data for files page
+export const initialFiles = [
+  { id: 1, name: "Database_Schema_v2.sql", size: "2.4 MB", uploadedBy: "Mike" },
+  { id: 2, name: "Q3_Financial_Forecast.xlsx", size: "1.8 MB", uploadedBy: "Elina" },
+  { id: 3, name: "UI_Spec.png", size: "8.1 MB", uploadedBy: "Jane" },
+  { id: 4, name: "API_Doc.pdf", size: "512 KB", uploadedBy: "Nova" },
+  { id: 5, name: "Architecture.png", size: "4.3 MB", uploadedBy: "Brian" },
+];

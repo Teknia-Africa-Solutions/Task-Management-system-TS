@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {userPath} from "../../../utils/routes";
+import { useSearch } from "../../../context/SearchCOntext";
+
 import {
   Search,
   SlidersHorizontal,
@@ -15,7 +17,7 @@ export default function UserTopbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
-
+const { searchTerm, setSearchTerm } = useSearch();
   const user = { name: "Jane Doe", email: "jane@taskflow.io", role: "Member" };
   const initials = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2);
   const notificationCount = 3; 
@@ -49,12 +51,14 @@ export default function UserTopbar() {
       </div>
 
       {/* Search */}
-      <div className="flex-1 max-w-md hidden lg:block">
+      <div className="flex-1 max-w-md ">
         <div className="relative">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7280]" />
           <input
             type="text"
             placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-3 py-2 text-sm border border-black/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#05620C]/30"
           />
         </div>

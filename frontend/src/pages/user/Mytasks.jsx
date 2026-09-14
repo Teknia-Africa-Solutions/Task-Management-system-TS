@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Eye, CheckCircle2 } from "lucide-react";
 import { allTasks } from "../../data/mockData";
+import { useSearch } from "../../context/SearchCOntext";
+
 
 const filters = ["All", "Todo", "In Progress", "Review", "Done"];
 
@@ -19,11 +21,13 @@ const statusStyles = {
 
 export default function MyTasks() {
   const [activeFilter, setActiveFilter] = useState("All");
+  const { searchTerm } = useSearch();
 
-  const visibleTasks =
-    activeFilter === "All"
-      ? allTasks
-      : allTasks.filter((task) => task.status === activeFilter);
+
+  const visibleTasks =allTasks
+  .filter((task) =>activeFilter === "All"|| task.status === activeFilter)
+  .filter((task) => task.title.toLowerCase().includes(searchTerm.toLowerCase())
+);
 
   return (
     <div className="space-y-6">
