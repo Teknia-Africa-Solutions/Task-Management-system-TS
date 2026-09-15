@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {userPath} from "../../../utils/routes";
 import { useSearch } from "../../../context/SearchCOntext";
+import {useAuth} from "../../../context/AuthContext";
 
 import {
   Search,
@@ -18,7 +19,7 @@ export default function UserTopbar() {
   const menuRef = useRef(null);
   const navigate = useNavigate();
 const { searchTerm, setSearchTerm } = useSearch();
-  const user = { name: "Jane Doe", email: "jane@taskflow.io", role: "Member" };
+  const {user,logout} = useAuth();
   const initials = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2);
   const notificationCount = 3; 
 
@@ -32,11 +33,10 @@ const { searchTerm, setSearchTerm } = useSearch();
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
+const handleLogout = () => {
+  logout();
+  navigate("/login");
+};
 
   return (
     <header className="flex items-center justify-between gap-4 px-6 py-4 bg-white border-b border-black/5">

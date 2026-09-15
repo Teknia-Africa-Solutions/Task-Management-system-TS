@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../services/authService";
 import logo from "../../assets/logo.png";
+import { useAuth } from "../../context/AuthContext";
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -9,6 +11,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,8 +19,8 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const data = await loginUser({ email, password });
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      login(data.user, data.token);
+      navigate("/user/dashboard");
 
       //Redirect based on role
       if(data.user.role==="Member"){

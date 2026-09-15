@@ -31,6 +31,8 @@ app.get("/api/db-health", async (_req, res) => {
     res.status(503).json({ ok: false, message: error.message });
   }
 });
+const authRoutes=require("./src/routes/authRoutes")
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`API running on http://localhost:${PORT}`);
