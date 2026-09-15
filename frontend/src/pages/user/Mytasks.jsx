@@ -1,12 +1,8 @@
 import { useState } from "react";
-import { Eye, CheckCircle2 } from "lucide-react"; // flagging: double-check these exact icon names exist in your installed lucide-react version
+import { Eye, CheckCircle2 } from "lucide-react";
+import { allTasks } from "../../data/mockData";
+import { useSearch } from "../../context/SearchCOntext";
 
-const allTasks = [
-  { id: 1, title: "UI Design for Dashboard", priority: "High", status: "In Progress", category: "Design", due: "2026-05-21", assignee: "Jane Doe" },
-  { id: 2, title: "Database Design", priority: "Medium", status: "Todo", category: "Backend", due: "2026-05-23", assignee: "David Brown" },
-  { id: 3, title: "API Integration", priority: "Medium", status: "In Progress", category: "Backend", due: "2026-05-24", assignee: "Mike Johnson" },
-  { id: 4, title: "Project Documentation", priority: "Low", status: "Todo", category: "Docs", due: "2026-05-28", assignee: "Sarah Wilson" },
-];
 
 const filters = ["All", "Todo", "In Progress", "Review", "Done"];
 
@@ -25,11 +21,13 @@ const statusStyles = {
 
 export default function MyTasks() {
   const [activeFilter, setActiveFilter] = useState("All");
+  const { searchTerm } = useSearch();
 
-  const visibleTasks =
-    activeFilter === "All"
-      ? allTasks
-      : allTasks.filter((task) => task.status === activeFilter);
+
+  const visibleTasks =allTasks
+  .filter((task) =>activeFilter === "All"|| task.status === activeFilter)
+  .filter((task) => task.title.toLowerCase().includes(searchTerm.toLowerCase())
+);
 
   return (
     <div className="space-y-6">

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useState,cloneElement } from "react";
 import { Menu } from "lucide-react";
+import { SearchProvider } from "../context/SearchCOntext";
 
 export default function Layout({ sidebar, topbar }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -10,6 +11,7 @@ export default function Layout({ sidebar, topbar }) {
   });
 
   return (
+    <SearchProvider>
     <div className="flex h-screen overflow-hidden">
       {sidebarOpen && (
         <div
@@ -40,5 +42,6 @@ export default function Layout({ sidebar, topbar }) {
         </main>
       </div>
     </div>
+    </SearchProvider> 
   );
 }

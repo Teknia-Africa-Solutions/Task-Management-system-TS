@@ -7,6 +7,9 @@ export const USER_ROUTES = {
   files: "files",
   messages: "messages",
   notifications: "notifications",
+   viewProfile: "profile",
+  accountSettings: "settings",
+  notificationPreferences: "notification-preferences",
 };
 
 export const userPath = (key) => `/user/${USER_ROUTES[key]}`;

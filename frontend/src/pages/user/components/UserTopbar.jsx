@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {userPath} from "../../../utils/routes";
+import { useSearch } from "../../../context/SearchCOntext";
+
 import {
   Search,
   SlidersHorizontal,
@@ -9,19 +12,16 @@ import {
   Settings,
   BellRing,
   LogOut,
-} from "lucide-react"; // flagging: double-check these exact icon names exist in your installed lucide-react version
-
+} from "lucide-react";
 export default function UserTopbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
-
-  // Placeholder — replace with real user data from AuthContext once it's built
+const { searchTerm, setSearchTerm } = useSearch();
   const user = { name: "Jane Doe", email: "jane@taskflow.io", role: "Member" };
   const initials = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2);
-  const notificationCount = 3; // placeholder — wire to real unread count later
+  const notificationCount = 3; 
 
-  // Close the dropdown when clicking anywhere outside it
   useEffect(() => {
     function handleClickOutside(e) {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -40,30 +40,31 @@ export default function UserTopbar() {
 
   return (
     <header className="flex items-center justify-between gap-4 px-6 py-4 bg-white border-b border-black/5">
-      {/* Title + subtitle */}
-      <div className="shrink-0">
+      <div className="min-w-0 flex-1">
         <h1 className="text-xl font-bold text-[#1F2937]">
           Dashboard{" "}
           <span className="font-normal text-[#6B7280]">
             Welcome Back, {user.name.split(" ")[0]}
           </span>
         </h1>
-        <p className="text-sm text-[#6B7280]">Here's what's happening with your tasks today.</p>
+        <p className=" hidden text-sm text-[primary]">Here's what's happening with your tasks today.</p>
       </div>
 
       {/* Search */}
-      <div className="flex-1 max-w-md hidden lg:block">
+      <div className="flex-1 max-w-md ">
         <div className="relative">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7280]" />
           <input
             type="text"
             placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-3 py-2 text-sm border border-black/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#05620C]/30"
           />
         </div>
       </div>
 
-      {/* Right side: filter, notifications, new task, profile */}
+      {/*filter, notifications, new task, profile */}
       <div className="flex items-center gap-3 shrink-0">
         <button className="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium border border-black/10 rounded-lg text-[#1F2937] hover:bg-black/5 transition">
           <SlidersHorizontal size={16} />
@@ -103,15 +104,30 @@ export default function UserTopbar() {
                 <p className="text-xs text-[#6B7280]">{user.email}</p>
               </div>
 
-              <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1F2937] hover:bg-black/5 transition">
+              <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1F2937] hover:bg-black/5 transition"
+                  onClick={() => {
+                    navigate(userPath("viewProfile"));
+                    setMenuOpen(false); 
+                  }}
+                >
                 <User size={16} />
                 View Profile
               </button>
-              <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1F2937] hover:bg-black/5 transition">
+              <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1F2937] hover:bg-black/5 transition"
+                  onClick={() => {
+                    navigate(userPath("accountSettings"));
+                    setMenuOpen(false);
+                  }}  
+                >
                 <Settings size={16} />
                 Account Settings
               </button>
-              <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1F2937] hover:bg-black/5 transition">
+              <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1F2937] hover:bg-black/5 transition"
+                  onClick={() => {
+                    navigate(userPath("notificationPreferences"));
+                    setMenuOpen(false);
+                  }}
+                >
                 <BellRing size={16} />
                 Notification Preferences
               </button>

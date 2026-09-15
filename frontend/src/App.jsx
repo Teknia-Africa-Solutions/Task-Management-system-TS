@@ -12,6 +12,9 @@ import Files from "./pages/user/Files";
 import Messages from "./pages/user/Messages";
 import Calendar from "./pages/user/Calendar";
 import  Notifications from "./pages/user/Notifications";
+import ViewProfile from "./pages/user/ViewProfile";
+import AccountSettings from "./pages/user/AccountSettings";
+import NotificationPreferences from "./pages/user/NotificationPreferences.jsx";
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
         <Route path={USER_ROUTES.messages} element={<Messages/>}/>
         <Route path={USER_ROUTES.calendar} element={<Calendar/>}/>
         <Route path={USER_ROUTES.notifications} element={<Notifications/>}/>
+        <Route path={USER_ROUTES.viewProfile} element={<ViewProfile/>}/>
+        <Route path={USER_ROUTES.accountSettings} element={<AccountSettings/>}/>
+        <Route path={USER_ROUTES.notificationPreferences} element={<NotificationPreferences/>}/>
 
       </Route>
     </Routes>
