@@ -24,6 +24,7 @@ import Notifications from './Notifications';
 import Files from './Files';
 import Teams from './Teams';
 import Projects from './Projects';
+import Users from './Users';
 // ============================================================
 // COMPONENT
 // ============================================================
@@ -1932,7 +1933,21 @@ const renderAddTaskModal = () => (
   const renderContent = () => {
     switch(activeTab) {
       case 'dashboard': return renderDashboard();
-      case 'users': return renderUsers();
+    case 'users': return (
+  <Users
+    users={users}
+    stats={stats}
+    searchTerm={searchTerm}
+    userFilter={userFilter}
+    setUserFilter={setUserFilter}
+    onAddUser={() => setIsAddUserModalOpen(true)}
+    onToggleStatus={handleToggleUserStatus}
+    onDelete={(id) => {
+      setConfirmAction({ type: 'deleteUser', id });
+      setIsConfirmModalOpen(true);
+    }}
+  />
+);
   case 'teams': return (
   <Teams
     teams={teams}
