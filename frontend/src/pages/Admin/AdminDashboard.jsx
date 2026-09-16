@@ -12,7 +12,7 @@ import {
 import { getPriorityBadge, getStatusBadge } from '../../utils/badges';
 import { useToast } from '../../hooks/useToast';
 import { useIsMobile } from '../../hooks/useIsMobile';
-
+import Toast from '../../components/admin/Toast';
 // ============================================================
 // COMPONENT
 // ============================================================
@@ -2642,18 +2642,6 @@ const renderProfile = () => {
     </div>
   );
 
-  // ============================================================
-  // TOAST
-  // ============================================================
-
-  const renderToast = () => {
-    if (!toastMessage) return null;
-    return (
-      <div style={{ position: 'fixed', bottom: '24px', right: '24px', padding: '12px 24px', borderRadius: '8px', background: toastType === 'success' ? '#05620C' : '#FF883E', color: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', zIndex: 2000, fontSize: '14px', fontWeight: '500' }}>
-        {toastMessage}
-      </div>
-    );
-  };
 
   // ============================================================
   // MAIN RENDER
@@ -3013,7 +3001,7 @@ const renderProfile = () => {
       {isAddTeamModalOpen && renderAddTeamModal()}
       {isAddProjectModalOpen && renderAddProjectModal()}
       {isAddTaskModalOpen && renderAddTaskModal()}
-      {renderToast()}
+     <Toast message={toastMessage} type={toastType} />
     </div>
   );
 };
