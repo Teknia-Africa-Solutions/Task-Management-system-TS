@@ -8,10 +8,10 @@ import {
   INITIAL_TASKS,
   INITIAL_FILES,
   INITIAL_NOTIFICATIONS,
-} from '../services/adminMockData';
-import { getPriorityBadge, getStatusBadge } from '../utils/badges';
-import { useToast } from '../hooks/useToast';
-import { useIsMobile } from '../hooks/useIsMobile';
+} from '../../services/adminMockData';
+import { getPriorityBadge, getStatusBadge } from '../../utils/badges';
+import { useToast } from '../../hooks/useToast';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 // ============================================================
 // COMPONENT

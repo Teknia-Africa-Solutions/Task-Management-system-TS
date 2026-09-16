@@ -15,8 +15,7 @@ import Notifications from "./pages/user/Notifications";
 import ViewProfile from "./pages/user/ViewProfile";
 import AccountSettings from "./pages/user/AccountSettings";
 import NotificationPreferences from "./pages/user/NotificationPreferences.jsx";
-// ✅ ADD YOUR ADMIN IMPORT
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './pages/Admin/AdminDashboard';
 
 function App() {
   return (
