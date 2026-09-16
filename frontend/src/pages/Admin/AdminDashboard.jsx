@@ -16,6 +16,7 @@ import Toast from '../../components/admin/Toast';
 import StatCard from '../../components/admin/StatCard';
 import Modal from '../../components/admin/Modal';
 import AdminSidebar from '../../components/admin/AdminSidebar';
+import AdminHeader from '../../components/admin/AdminHeader';
 // ============================================================
 // COMPONENT
 // ============================================================
@@ -2656,99 +2657,15 @@ const renderAddTaskModal = () => (
   flexDirection: 'column'
 }}>
         {/* Header */}
-<header style={{
-  background: 'white',
-  borderBottom: '1px solid #E8F4E9',
-  padding: '12px 24px',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  position: 'sticky',
-  top: 0,
-  zIndex: 40
-}}>
-  {/* LEFT SIDE - Hamburger + Title */}
-  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-    {/* ✅ HAMBURGER BUTTON - ADDED HERE */}
-    <button 
-      onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-      style={{
-        display: isMobile ? 'flex' : 'none',
-        background: 'none',
-        border: 'none',
-        fontSize: '24px',
-        cursor: 'pointer',
-        color: '#1F2937',
-        padding: '4px 8px',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-    >
-      ☰
-    </button>
-    <div>
-      <h1 style={{ fontSize: '20px', fontWeight: '700', color: '#05620C', textTransform: 'capitalize' }}>
-        {activeTab === 'dashboard' ? 'Admin Dashboard' : activeTab}
-      </h1>
-      <p style={{ fontSize: '13px', color: '#6B7280' }}>Hello Admin, Here's your organization overview.</p>
-    </div>
-  </div>
-
-  {/* RIGHT SIDE - Search, Notification, Profile */}
-  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-      backgroundColor: '#F8FAF8',
-      padding: '6px 12px',
-      borderRadius: '8px',
-      border: '1px solid #E8F4E9'
-    }}>
-      <span style={{ color: '#6B7280', fontSize: '16px', fontWeight: '400' }}>⌕</span>
-      <input
-        type="text"
-        placeholder="Search..."
-        style={{
-          border: 'none',
-          outline: 'none',
-          backgroundColor: 'transparent',
-          fontSize: '13px',
-          color: '#1F2937',
-          width: isMobile ? '100px' : '160px'
-        }}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-    </div>
-    <button style={{ position: 'relative', padding: '8px', borderRadius: '8px', border: 'none', background: 'transparent', cursor: 'pointer' }}>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F2937" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-      </svg>
-      {stats.unreadNotifications > 0 && (
-        <span style={{ position: 'absolute', top: '4px', right: '4px', width: '8px', height: '8px', borderRadius: '50%', background: '#FF883E' }}></span>
-      )}
-    </button>
-    <button
-      onClick={() => setActiveTab('profile')}
-      style={{
-        width: '36px',
-        height: '36px',
-        borderRadius: '50%',
-        backgroundColor: '#05620C',
-        color: 'white',
-        border: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontWeight: '600',
-        fontSize: '14px',
-        cursor: 'pointer'
-      }}
-    >A</button>
-  </div>
-</header>
+<AdminHeader
+  activeTab={activeTab}
+  searchTerm={searchTerm}
+  setSearchTerm={setSearchTerm}
+  unreadCount={stats.unreadNotifications}
+  onProfileClick={() => setActiveTab('profile')}
+  onMenuToggle={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+  isMobile={isMobile}
+/>
 
         {/* Content */}
        <main style={{ flex: 1, backgroundColor: '#F8FAF8', paddingTop: '0px' }}>
