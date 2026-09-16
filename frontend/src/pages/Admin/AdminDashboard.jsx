@@ -13,6 +13,7 @@ import { getPriorityBadge, getStatusBadge } from '../../utils/badges';
 import { useToast } from '../../hooks/useToast';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import Toast from '../../components/admin/Toast';
+import StatCard from '../../components/admin/StatCard';
 // ============================================================
 // COMPONENT
 // ============================================================
@@ -542,7 +543,7 @@ const renderDashboard = () => {
     inactiveUsers: users.filter(u => u.status !== 'Active').length,
   };
 
-  return (
+ return (
     <div style={{ padding: '24px', backgroundColor: '#F8FAF8' }}>
       {/* Statistics Cards */}
       <div style={{
@@ -552,134 +553,78 @@ const renderDashboard = () => {
         marginBottom: '20px'
       }}>
         {/* Card 1 - Total Users */}
-        <div 
+        <StatCard
+          label="Total Users"
+          value={stats.totalUsers}
+          subtext={`+${stats.activeUsers} active`}
+          iconBg="#E8F4E9"
+          iconColor="#05620C"
+          subtextColor="#05620C"
           onClick={() => setActiveTab('users')}
-          style={{ 
-            background: 'white', 
-            borderRadius: '10px', 
-            padding: '16px 14px', 
-            border: '1px solid #E5E7EB', 
-            boxShadow: '0 1px 2px rgba(0,0,0,0.05)', 
-            cursor: 'pointer', 
-            transition: 'box-shadow 0.2s'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'}
-          onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)'}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <p style={{ fontSize: '10px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.3px', margin: 0 }}>
-                Total Users
-              </p>
-              <p style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', margin: '2px 0 0 0' }}>{stats.totalUsers}</p>
-              <p style={{ fontSize: '10px', color: '#05620C', fontWeight: '500', margin: 0 }}>+{stats.activeUsers} active</p>
-            </div>
-            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: '#E8F4E9' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#05620C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </div>
-          </div>
-        </div>
+          icon={
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          }
+        />
 
         {/* Card 2 - Total Tasks */}
-        <div 
+        <StatCard
+          label="Total Tasks"
+          value={stats.totalTasks}
+          subtext={`${stats.completedTasks} completed`}
+          iconBg="#E8F4E9"
+          iconColor="#05620C"
+          subtextColor="#05620C"
           onClick={() => setActiveTab('tasks')}
-          style={{ 
-            background: 'white', 
-            borderRadius: '10px', 
-            padding: '16px 14px', 
-            border: '1px solid #E5E7EB', 
-            boxShadow: '0 1px 2px rgba(0,0,0,0.05)', 
-            cursor: 'pointer', 
-            transition: 'box-shadow 0.2s'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'}
-          onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)'}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <p style={{ fontSize: '10px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.3px', margin: 0 }}>
-                Total Tasks
-              </p>
-              <p style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', margin: '2px 0 0 0' }}>{stats.totalTasks}</p>
-              <p style={{ fontSize: '10px', color: '#05620C', fontWeight: '500', margin: 0 }}>{stats.completedTasks} completed</p>
-            </div>
-            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: '#E8F4E9' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#05620C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                <polyline points="22 4 12 14.01 9 11.01" />
-              </svg>
-            </div>
-          </div>
-        </div>
+          icon={
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          }
+        />
 
         {/* Card 3 - Active Projects */}
-        <div 
+        <StatCard
+          label="Active Projects"
+          value={stats.activeProjects}
+          subtext={`${stats.atRiskProjects} at risk`}
+          iconBg="#FFF0E8"
+          iconColor="#FF883E"
+          subtextColor="#6B7280"
           onClick={() => setActiveTab('projects')}
-          style={{ 
-            background: 'white', 
-            borderRadius: '10px', 
-            padding: '16px 14px', 
-            border: '1px solid #E5E7EB', 
-            boxShadow: '0 1px 2px rgba(0,0,0,0.05)', 
-            cursor: 'pointer', 
-            transition: 'box-shadow 0.2s'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'}
-          onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)'}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <p style={{ fontSize: '10px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.3px', margin: 0 }}>
-                Active Projects
-              </p>
-              <p style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', margin: '2px 0 0 0' }}>{stats.activeProjects}</p>
-              <p style={{ fontSize: '10px', color: '#6B7280', fontWeight: '500', margin: 0 }}>{stats.atRiskProjects} at risk</p>
-            </div>
-            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: '#FFF0E8' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF883E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-              </svg>
-            </div>
-          </div>
-        </div>
+          icon={
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+            </svg>
+          }
+        />
 
         {/* Card 4 - Overdue Tasks */}
-        <div 
-          onClick={() => { setActiveTab('tasks'); setTaskFilter({ ...taskFilter, status: 'Overdue' }); }}
-          style={{ 
-            background: 'white', 
-            borderRadius: '10px', 
-            padding: '16px 14px', 
-            border: '1px solid #E5E7EB', 
-            boxShadow: '0 1px 2px rgba(0,0,0,0.05)', 
-            cursor: 'pointer', 
-            transition: 'box-shadow 0.2s'
+        <StatCard
+          label="Overdue Tasks"
+          value={stats.overdueTasks}
+          subtext="⚠ Needs attention"
+          iconBg="#FEE2E2"
+          iconColor="#EF4444"
+          subtextColor="#EF4444"
+          onClick={() => {
+            setActiveTab('tasks');
+            setTaskFilter({ ...taskFilter, status: 'Overdue' });
           }}
-          onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'}
-          onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)'}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <p style={{ fontSize: '10px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.3px', margin: 0 }}>
-                Overdue Tasks
-              </p>
-              <p style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', margin: '2px 0 0 0' }}>{stats.overdueTasks}</p>
-              <p style={{ fontSize: '10px', color: '#EF4444', fontWeight: '500', margin: 0 }}>⚠ Needs attention</p>
-            </div>
-            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: '#FEE2E2' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
-              </svg>
-            </div>
-          </div>
-        </div>
+          icon={
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          }
+        />
       </div>
 
+      
       {/* Charts Section */}
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', marginBottom: '24px' }}>
         {/* User Growth Chart */}
