@@ -10,6 +10,9 @@ import {
   INITIAL_NOTIFICATIONS,
 } from '../services/adminMockData';
 import { getPriorityBadge, getStatusBadge } from '../utils/badges';
+import { useToast } from '../hooks/useToast';
+import { useIsMobile } from '../hooks/useIsMobile';
+
 // ============================================================
 // COMPONENT
 // ============================================================
@@ -40,11 +43,10 @@ const AdminDashboard = () => {
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
   const [sessionTimeout, setSessionTimeout] = useState('30');
   const [passwordRequirement, setPasswordRequirement] = useState('Standard (8+ chars)');
-  const [toastMessage, setToastMessage] = useState(null);
-  const [toastType, setToastType] = useState('success');
+ const { toastMessage, toastType, showToast } = useToast();
   const fileInputRef = useRef(null);
 
-const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+const isMobile = useIsMobile();
 const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
 
@@ -62,16 +64,10 @@ const [passwordError, setPasswordError] = useState('');
 const [showPassword, setShowPassword] = useState(false);
 
 
+// Close mobile sidebar when switching to desktop
 useEffect(() => {
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 768);
-    if (window.innerWidth >= 768) {
-      setIsMobileSidebarOpen(false);
-    }
-  };
-  window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize);
-}, []);
+  if (!isMobile) setIsMobileSidebarOpen(false);
+}, [isMobile]);
 
 
   // ---------- DATA STATES ----------
@@ -110,13 +106,6 @@ useEffect(() => {
     storageLimit: 10,
     unreadNotifications: notifications.filter(n => !n.read).length,
     avgWorkload: Math.round(teams.reduce((acc, t) => acc + t.workload, 0) / teams.length),
-  };
-
-  // ---------- TOAST ----------
-  const showToast = (message, type = 'success') => {
-    setToastMessage(message);
-    setToastType(type);
-    setTimeout(() => setToastMessage(null), 3000);
   };
 
 
