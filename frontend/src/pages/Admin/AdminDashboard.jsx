@@ -790,6 +790,7 @@ const renderAddTaskModal = () => (
   <Users
     users={users}
     stats={stats}
+    isMobile={isMobile}   
     searchTerm={searchTerm}
     userFilter={userFilter}
     setUserFilter={setUserFilter}
@@ -805,6 +806,7 @@ const renderAddTaskModal = () => (
   <Teams
     teams={teams}
     stats={stats}
+    isMobile={isMobile}   
     searchTerm={searchTerm}
     selectedTeam={selectedTeam}
     setSelectedTeam={setSelectedTeam}
@@ -878,6 +880,7 @@ const renderAddTaskModal = () => (
     case 'reports': return (
   <Reports
     tasks={tasks}
+    isMobile={isMobile}   
     onExportCSV={handleExportCSV}
     onExportPDF={handleExportPDF}
     onToast={showToast}

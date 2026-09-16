@@ -6,6 +6,7 @@ import { getStatusBadge } from '../../utils/badges';
 const Users = ({
   users,
   stats,
+  isMobile,
   searchTerm,
   userFilter,
   setUserFilter,
@@ -25,7 +26,12 @@ const Users = ({
   return (
     <div style={{ padding: '16px 24px 24px 24px' }}>
       {/* Summary Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px' }}>
+<div style={{ 
+  display: 'grid', 
+  gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)', 
+  gap: '12px', 
+  marginBottom: '20px' 
+}}>
         <div style={{ background: 'white', borderRadius: '10px', padding: '14px 16px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
           <p style={{ fontSize: '10px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.3px', margin: 0 }}>Total Users</p>
           <p style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', margin: '2px 0 0 0' }}>{stats.totalUsers}</p>

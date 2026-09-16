@@ -38,7 +38,7 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
   };
 
   return (
-    <div style={{ padding: '24px', backgroundColor: '#F8FAF8' }}>
+    <div style={{ padding: isMobile ? '12px' : '24px', backgroundColor: '#F8FAF8' }}>
       {/* Statistics Cards */}
       <div
         style={{
@@ -105,7 +105,12 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
       </div>
 
       {/* Charts Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', marginBottom: '24px' }}>
+<div style={{ 
+  display: 'grid', 
+  gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr', 
+  gap: '20px', 
+  marginBottom: '24px' 
+}}>
         {/* User Growth Chart */}
         <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #E8F4E9' }}>
@@ -162,15 +167,20 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
           </div>
 
           <KanbanBoard
-            taskStatusData={taskStatusData}
-            total={total}
-            onStatusClick={(statusLabel) => onFilterTasks(statusLabel)}
-          />
+  taskStatusData={taskStatusData}
+  total={total}
+  isMobile={isMobile}
+  onStatusClick={(statusLabel) => onFilterTasks(statusLabel)}
+/>
         </div>
       </div>
 
       {/* Bottom Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
+<div style={{ 
+  display: 'grid', 
+  gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr', 
+  gap: '20px' 
+}}>
         {/* Team Workload */}
         <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #E8F4E9' }}>

@@ -2,18 +2,20 @@
 
 import React from 'react';
 
-const KanbanBoard = ({ taskStatusData, total, onStatusClick }) => {
+const KanbanBoard = ({ taskStatusData, total, isMobile, onStatusClick }) => {
   return (
     <>
       {/* Kanban Mini-Board Grid */}
       <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: '8px',
-          height: '180px',
-        }}
-      >
+  style={{
+    display: 'grid',
+    gridTemplateColumns: isMobile ? 'repeat(5, 90px)' : 'repeat(5, 1fr)',
+    gap: '8px',
+    minHeight: '180px',
+    overflowX: 'auto',
+    paddingBottom: '8px',
+  }}
+>
         {taskStatusData.map((status, index) => {
           const percentage = total > 0 ? Math.round((status.count / total) * 100) : 0;
 

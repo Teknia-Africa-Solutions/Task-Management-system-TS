@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const Reports = ({ tasks, onExportCSV, onExportPDF, onToast }) => {
+const Reports = ({ tasks, isMobile, onExportCSV, onExportPDF, onToast }) => {
   // ---------- DATA ----------
   const topProjects = [
     { name: 'Website Redesign', progress: 78, tasks: '12/16', team: 'Frontend', status: 'On Hold', deadline: 'Sep 30, 2026' },
@@ -190,7 +190,11 @@ const Reports = ({ tasks, onExportCSV, onExportPDF, onToast }) => {
       </div>
 
       {/* Recent Activities + System Overview */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+   <div style={{ 
+  display: 'grid', 
+  gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+  gap: '24px' 
+}}>
         {/* Recent Activities */}
         <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
