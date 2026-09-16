@@ -16,17 +16,19 @@ const AdminHeader = ({
       style={{
         background: 'white',
         borderBottom: '1px solid #E8F4E9',
-        padding: '12px 24px',
+        padding: isMobile ? '12px 16px' : '12px 24px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         position: 'sticky',
         top: 0,
         zIndex: 40,
+        gap: '8px',
       }}
     >
       {/* LEFT SIDE - Hamburger + Title */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
+        {/* HAMBURGER */}
         <button
           onClick={onMenuToggle}
           style={{
@@ -39,58 +41,69 @@ const AdminHeader = ({
             padding: '4px 8px',
             alignItems: 'center',
             justifyContent: 'center',
+            flexShrink: 0,
           }}
         >
           ☰
         </button>
-        <div>
+
+        <div style={{ minWidth: 0, flex: 1 }}>
           <h1
             style={{
-              fontSize: '20px',
+              fontSize: isMobile ? '16px' : '20px',
               fontWeight: '700',
               color: '#05620C',
               textTransform: 'capitalize',
               margin: 0,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
             {activeTab === 'dashboard' ? 'Admin Dashboard' : activeTab}
           </h1>
-          <p style={{ fontSize: '13px', color: '#6B7280', margin: 0 }}>
-            Hello Admin, Here's your organization overview.
-          </p>
+          {!isMobile && (
+            <p style={{ fontSize: '13px', color: '#6B7280', margin: 0 }}>
+              Hello Admin, Here's your organization overview.
+            </p>
+          )}
         </div>
       </div>
 
       {/* RIGHT SIDE - Search, Notification, Profile */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            backgroundColor: '#F8FAF8',
-            padding: '6px 12px',
-            borderRadius: '8px',
-            border: '1px solid #E8F4E9',
-          }}
-        >
-          <span style={{ color: '#6B7280', fontSize: '16px', fontWeight: '400' }}>⌕</span>
-          <input
-            type="text"
-            placeholder="Search..."
+      <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '6px' : '12px', flexShrink: 0 }}>
+        {/* SEARCH - hidden on mobile */}
+        {!isMobile && (
+          <div
             style={{
-              border: 'none',
-              outline: 'none',
-              backgroundColor: 'transparent',
-              fontSize: '13px',
-              color: '#1F2937',
-              width: isMobile ? '100px' : '160px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              backgroundColor: '#F8FAF8',
+              padding: '6px 12px',
+              borderRadius: '8px',
+              border: '1px solid #E8F4E9',
             }}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+          >
+            <span style={{ color: '#6B7280', fontSize: '16px', fontWeight: '400' }}>⌕</span>
+            <input
+              type="text"
+              placeholder="Search..."
+              style={{
+                border: 'none',
+                outline: 'none',
+                backgroundColor: 'transparent',
+                fontSize: '13px',
+                color: '#1F2937',
+                width: '160px',
+              }}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        )}
 
+        {/* BELL */}
         <button
           style={{
             position: 'relative',
@@ -99,6 +112,7 @@ const AdminHeader = ({
             border: 'none',
             background: 'transparent',
             cursor: 'pointer',
+            flexShrink: 0,
           }}
         >
           <svg
@@ -129,11 +143,12 @@ const AdminHeader = ({
           )}
         </button>
 
+        {/* PROFILE */}
         <button
           onClick={onProfileClick}
           style={{
-            width: '36px',
-            height: '36px',
+            width: isMobile ? '32px' : '36px',
+            height: isMobile ? '32px' : '36px',
             borderRadius: '50%',
             backgroundColor: '#05620C',
             color: 'white',
@@ -142,8 +157,9 @@ const AdminHeader = ({
             alignItems: 'center',
             justifyContent: 'center',
             fontWeight: '600',
-            fontSize: '14px',
+            fontSize: isMobile ? '12px' : '14px',
             cursor: 'pointer',
+            flexShrink: 0,
           }}
         >
           A
