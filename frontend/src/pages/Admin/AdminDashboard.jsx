@@ -14,6 +14,7 @@ import { useToast } from '../../hooks/useToast';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import Toast from '../../components/admin/Toast';
 import StatCard from '../../components/admin/StatCard';
+import Modal from '../../components/admin/Modal';
 // ============================================================
 // COMPONENT
 // ============================================================
@@ -624,7 +625,7 @@ const renderDashboard = () => {
         />
       </div>
 
-      
+
       {/* Charts Section */}
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', marginBottom: '24px' }}>
         {/* User Growth Chart */}
@@ -2353,239 +2354,230 @@ const renderProfile = () => {
   // ============================================================
 
   const renderConfirmModal = () => (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-      <div style={{ background: 'white', borderRadius: '12px', padding: '24px', maxWidth: '400px', width: '100%' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-          <span style={{ fontSize: '24px' }}>⚠️</span>
-          <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1F2937' }}>Confirm Action</h3>
-        </div>
-        <p style={{ color: '#6B7280', marginBottom: '20px' }}>Are you sure you want to perform this action? This cannot be undone.</p>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <button onClick={handleConfirmAction} style={{ flex: 1, padding: '10px', background: '#FF883E', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Confirm</button>
-          <button onClick={() => { setIsConfirmModalOpen(false); setConfirmAction(null); }} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Cancel</button>
-        </div>
-      </div>
+  <Modal
+    isOpen={isConfirmModalOpen}
+    onClose={() => { setIsConfirmModalOpen(false); setConfirmAction(null); }}
+    title="⚠️ Confirm Action"
+    maxWidth={400}
+  >
+    <p style={{ color: '#6B7280', marginBottom: '20px' }}>Are you sure you want to perform this action? This cannot be undone.</p>
+    <div style={{ display: 'flex', gap: '12px' }}>
+      <button onClick={handleConfirmAction} style={{ flex: 1, padding: '10px', background: '#FF883E', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Confirm</button>
+      <button onClick={() => { setIsConfirmModalOpen(false); setConfirmAction(null); }} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Cancel</button>
     </div>
-  );
+  </Modal>
+);
 
-  const renderAddUserModal = () => (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-      <div style={{ background: 'white', borderRadius: '12px', padding: '24px', maxWidth: '450px', width: '100%' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1F2937' }}>Add New User</h3>
-          <button onClick={() => setIsAddUserModalOpen(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}>✕</button>
-        </div>
-        <form onSubmit={handleAddUser}>
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Full Name *</label>
-            <input type="text" name="name" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter full name" />
-          </div>
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Email *</label>
-            <input type="email" name="email" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter email" />
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Role</label>
-              <select name="role" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="User">User</option>
-                <option value="Project Manager">Project Manager</option>
-                <option value="Developer">Developer</option>
-                <option value="Designer">Designer</option>
-                <option value="QA">QA</option>
-                <option value="Super Admin">Super Admin</option>
-              </select>
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Team</label>
-              <select name="team" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="Management">Management</option>
-                <option value="Frontend">Frontend</option>
-                <option value="Backend">Backend</option>
-                <option value="Design">Design</option>
-                <option value="QA">QA</option>
-                <option value="DevOps">DevOps</option>
-              </select>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="submit" style={{ flex: 1, padding: '10px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Create User</button>
-            <button type="button" onClick={() => setIsAddUserModalOpen(false)} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
-          </div>
-        </form>
+ const renderAddUserModal = () => (
+  <Modal
+    isOpen={isAddUserModalOpen}
+    onClose={() => setIsAddUserModalOpen(false)}
+    title="Add New User"
+  >
+    <form onSubmit={handleAddUser}>
+      <div style={{ marginBottom: '12px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Full Name *</label>
+        <input type="text" name="name" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter full name" />
       </div>
-    </div>
-  );
+      <div style={{ marginBottom: '12px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Email *</label>
+        <input type="email" name="email" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter email" />
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Role</label>
+          <select name="role" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="User">User</option>
+            <option value="Project Manager">Project Manager</option>
+            <option value="Developer">Developer</option>
+            <option value="Designer">Designer</option>
+            <option value="QA">QA</option>
+            <option value="Super Admin">Super Admin</option>
+          </select>
+        </div>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Team</label>
+          <select name="team" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="Management">Management</option>
+            <option value="Frontend">Frontend</option>
+            <option value="Backend">Backend</option>
+            <option value="Design">Design</option>
+            <option value="QA">QA</option>
+            <option value="DevOps">DevOps</option>
+          </select>
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <button type="submit" style={{ flex: 1, padding: '10px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Create User</button>
+        <button type="button" onClick={() => setIsAddUserModalOpen(false)} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
+      </div>
+    </form>
+  </Modal>
+);
 
   const renderAddTeamModal = () => (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-      <div style={{ background: 'white', borderRadius: '12px', padding: '24px', maxWidth: '450px', width: '100%' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1F2937' }}>Create Team</h3>
-          <button onClick={() => setIsAddTeamModalOpen(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}>✕</button>
-        </div>
-        <form onSubmit={handleAddTeam}>
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Team Name *</label>
-            <input type="text" name="teamName" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter team name" />
-          </div>
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Description</label>
-            <textarea name="description" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937', minHeight: '60px' }} placeholder="Enter team description"></textarea>
-          </div>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Manager</label>
-            <input type="text" name="manager" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter manager name" />
-          </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="submit" style={{ flex: 1, padding: '10px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Create Team</button>
-            <button type="button" onClick={() => setIsAddTeamModalOpen(false)} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
-          </div>
-        </form>
+  <Modal
+    isOpen={isAddTeamModalOpen}
+    onClose={() => setIsAddTeamModalOpen(false)}
+    title="Create Team"
+  >
+    <form onSubmit={handleAddTeam}>
+      <div style={{ marginBottom: '12px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Team Name *</label>
+        <input type="text" name="teamName" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter team name" />
       </div>
-    </div>
-  );
+      <div style={{ marginBottom: '12px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Description</label>
+        <textarea name="description" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937', minHeight: '60px' }} placeholder="Enter team description"></textarea>
+      </div>
+      <div style={{ marginBottom: '16px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Manager</label>
+        <input type="text" name="manager" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter manager name" />
+      </div>
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <button type="submit" style={{ flex: 1, padding: '10px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Create Team</button>
+        <button type="button" onClick={() => setIsAddTeamModalOpen(false)} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
+      </div>
+    </form>
+  </Modal>
+);
 
-  const renderAddProjectModal = () => (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-      <div style={{ background: 'white', borderRadius: '12px', padding: '24px', maxWidth: '450px', width: '100%' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1F2937' }}>Create New Project</h3>
-          <button onClick={() => setIsAddProjectModalOpen(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}>✕</button>
-        </div>
-        <form onSubmit={handleAddProject}>
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Project Name *</label>
-            <input type="text" name="projectName" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter project name" />
-          </div>
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Description</label>
-            <textarea name="description" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937', minHeight: '60px' }} placeholder="Enter project description"></textarea>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Priority</label>
-              <select name="priority" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="Low">Low</option>
-                <option value="Medium" selected>Medium</option>
-                <option value="High">High</option>
-                <option value="Critical">Critical</option>
-              </select>
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Status</label>
-              <select name="status" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="Active">Active</option>
-                <option value="In Progress">In Progress</option>
-                <option value="On Hold">On Hold</option>
-                <option value="Completed">Completed</option>
-              </select>
-            </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Project Manager</label>
-              <select name="manager" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="Jane Cooper">Jane Cooper</option>
-                <option value="Mike Johnson">Mike Johnson</option>
-                <option value="Nova Lee">Nova Lee</option>
-                <option value="Sarah Wilson">Sarah Wilson</option>
-              </select>
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Team</label>
-              <select name="team" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="Frontend Team">Frontend Team</option>
-                <option value="Backend Team">Backend Team</option>
-                <option value="Design Team">Design Team</option>
-                <option value="QA Team">QA Team</option>
-                <option value="DevOps Team">DevOps Team</option>
-              </select>
-            </div>
-          </div>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Deadline</label>
-            <input type="date" name="deadline" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} />
-          </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="submit" style={{ flex: 1, padding: '10px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Create Project</button>
-            <button type="button" onClick={() => setIsAddProjectModalOpen(false)} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
-          </div>
-        </form>
+const renderAddProjectModal = () => (
+  <Modal
+    isOpen={isAddProjectModalOpen}
+    onClose={() => setIsAddProjectModalOpen(false)}
+    title="Create New Project"
+  >
+    <form onSubmit={handleAddProject}>
+      <div style={{ marginBottom: '12px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Project Name *</label>
+        <input type="text" name="projectName" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter project name" />
       </div>
-    </div>
-  );
+      <div style={{ marginBottom: '12px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Description</label>
+        <textarea name="description" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937', minHeight: '60px' }} placeholder="Enter project description"></textarea>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Priority</label>
+          <select name="priority" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
+          </select>
+        </div>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Status</label>
+          <select name="status" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="Active">Active</option>
+            <option value="In Progress">In Progress</option>
+            <option value="On Hold">On Hold</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Project Manager</label>
+          <select name="manager" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="Jane Cooper">Jane Cooper</option>
+            <option value="Mike Johnson">Mike Johnson</option>
+            <option value="Nova Lee">Nova Lee</option>
+            <option value="Sarah Wilson">Sarah Wilson</option>
+          </select>
+        </div>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Team</label>
+          <select name="team" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="Frontend Team">Frontend Team</option>
+            <option value="Backend Team">Backend Team</option>
+            <option value="Design Team">Design Team</option>
+            <option value="QA Team">QA Team</option>
+            <option value="DevOps Team">DevOps Team</option>
+          </select>
+        </div>
+      </div>
+      <div style={{ marginBottom: '16px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Deadline</label>
+        <input type="date" name="deadline" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} />
+      </div>
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <button type="submit" style={{ flex: 1, padding: '10px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Create Project</button>
+        <button type="button" onClick={() => setIsAddProjectModalOpen(false)} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
+      </div>
+    </form>
+  </Modal>
+);
 
-  const renderAddTaskModal = () => (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-      <div style={{ background: 'white', borderRadius: '12px', padding: '24px', maxWidth: '450px', width: '100%' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1F2937' }}>Create New Task</h3>
-          <button onClick={() => setIsAddTaskModalOpen(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}>✕</button>
-        </div>
-        <form onSubmit={handleAddTask}>
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Task Title *</label>
-            <input type="text" name="taskTitle" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter task title" />
-          </div>
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Description</label>
-            <textarea name="description" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937', minHeight: '60px' }} placeholder="Enter task description"></textarea>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Priority</label>
-              <select name="priority" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="Low">Low</option>
-                <option value="Medium" selected>Medium</option>
-                <option value="High">High</option>
-                <option value="Urgent">Urgent</option>
-                <option value="Critical">Critical</option>
-              </select>
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Status</label>
-              <select name="status" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Completed">Completed</option>
-                <option value="Blocked">Blocked</option>
-              </select>
-            </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Project</label>
-              <select name="project" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="Website Redesign">Website Redesign</option>
-                <option value="Mobile App">Mobile App</option>
-                <option value="API Server">API Server</option>
-                <option value="Database Optimization">Database Optimization</option>
-              </select>
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Assignee</label>
-              <select name="assignee" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
-                <option value="Jane Cooper">Jane Cooper</option>
-                <option value="Mike Johnson">Mike Johnson</option>
-                <option value="Nova Lee">Nova Lee</option>
-                <option value="Brian Kim">Brian Kim</option>
-                <option value="Sarah Wilson">Sarah Wilson</option>
-              </select>
-            </div>
-          </div>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Due Date</label>
-            <input type="date" name="dueDate" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} />
-          </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="submit" style={{ flex: 1, padding: '10px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Create Task</button>
-            <button type="button" onClick={() => setIsAddTaskModalOpen(false)} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
-          </div>
-        </form>
+const renderAddTaskModal = () => (
+  <Modal
+    isOpen={isAddTaskModalOpen}
+    onClose={() => setIsAddTaskModalOpen(false)}
+    title="Create New Task"
+  >
+    <form onSubmit={handleAddTask}>
+      <div style={{ marginBottom: '12px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Task Title *</label>
+        <input type="text" name="taskTitle" required style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} placeholder="Enter task title" />
       </div>
-    </div>
-  );
+      <div style={{ marginBottom: '12px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Description</label>
+        <textarea name="description" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937', minHeight: '60px' }} placeholder="Enter task description"></textarea>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Priority</label>
+          <select name="priority" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+            <option value="Urgent">Urgent</option>
+            <option value="Critical">Critical</option>
+          </select>
+        </div>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Status</label>
+          <select name="status" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Blocked">Blocked</option>
+          </select>
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Project</label>
+          <select name="project" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="Website Redesign">Website Redesign</option>
+            <option value="Mobile App">Mobile App</option>
+            <option value="API Server">API Server</option>
+            <option value="Database Optimization">Database Optimization</option>
+          </select>
+        </div>
+        <div>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Assignee</label>
+          <select name="assignee" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', background: 'white', color: '#1F2937' }}>
+            <option value="Jane Cooper">Jane Cooper</option>
+            <option value="Mike Johnson">Mike Johnson</option>
+            <option value="Nova Lee">Nova Lee</option>
+            <option value="Brian Kim">Brian Kim</option>
+            <option value="Sarah Wilson">Sarah Wilson</option>
+          </select>
+        </div>
+      </div>
+      <div style={{ marginBottom: '16px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#1F2937', marginBottom: '4px' }}>Due Date</label>
+        <input type="date" name="dueDate" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E8F4E9', borderRadius: '8px', fontSize: '14px', background: 'white', color: '#1F2937' }} />
+      </div>
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <button type="submit" style={{ flex: 1, padding: '10px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer' }}>Create Task</button>
+        <button type="button" onClick={() => setIsAddTaskModalOpen(false)} style={{ padding: '10px 20px', background: '#F8FAF8', color: '#1F2937', border: '1px solid #E8F4E9', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
+      </div>
+    </form>
+  </Modal>
+);
 
 
   // ============================================================
@@ -2941,11 +2933,11 @@ const renderProfile = () => {
       </div>
 
       {/* Modals */}
-      {isConfirmModalOpen && renderConfirmModal()}
-      {isAddUserModalOpen && renderAddUserModal()}
-      {isAddTeamModalOpen && renderAddTeamModal()}
-      {isAddProjectModalOpen && renderAddProjectModal()}
-      {isAddTaskModalOpen && renderAddTaskModal()}
+     {renderConfirmModal()}
+    {renderAddUserModal()}
+    {renderAddTeamModal()}
+    {renderAddProjectModal()}
+    {renderAddTaskModal()}
      <Toast message={toastMessage} type={toastType} />
     </div>
   );
