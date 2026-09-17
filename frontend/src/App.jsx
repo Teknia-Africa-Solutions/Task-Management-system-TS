@@ -15,7 +15,7 @@ import  Notifications from "./pages/user/Notifications";
 import ViewProfile from "./pages/user/ViewProfile";
 import AccountSettings from "./pages/user/AccountSettings";
 import NotificationPreferences from "./pages/user/NotificationPreferences.jsx";
-
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      <Route path="/user" element={<UserLayout />}>
+      <Route path="/user" element={<ProtectedRoute allowedRoles={["user"]}> <UserLayout /> </ProtectedRoute>}>
         <Route path={USER_ROUTES.dashboard} element={<Dashboard />} />
         <Route path={USER_ROUTES.myTasks} element={<MyTasks />} />
         <Route path={USER_ROUTES.projects} element={<Projects />} />
