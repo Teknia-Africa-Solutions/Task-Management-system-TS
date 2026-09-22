@@ -70,6 +70,14 @@ app.use("/api/files", fileRoutes);
 const reportRoutes = require("./src/routes/reportRoutes");
 app.use("/api/reports", reportRoutes);
 
+//SuperAdmin
+const userRoutes = require("./src/routes/userRoutes");
+app.use("/api/users", userRoutes);
+
+
+const dashboardRoutes = require("./src/routes/dashboardRoutes");
+app.use("/api/dashboard", dashboardRoutes);
+
 httpServer.listen(PORT, () => {
   console.log(`API running on http://localhost:${PORT}`);
 });
