@@ -16,6 +16,7 @@ import ViewProfile from "./pages/user/ViewProfile";
 import AccountSettings from "./pages/user/AccountSettings";
 import NotificationPreferences from "./pages/user/NotificationPreferences.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProjectDetail from "./pages/user/ProjectDetail";
 
 function App() {
   return (
@@ -24,8 +25,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      <Route path="/user" element={<ProtectedRoute allowedRoles={["user"]}> <UserLayout /> </ProtectedRoute>}>
-        <Route path={USER_ROUTES.dashboard} element={<Dashboard />} />
+<Route path="/user" element={<ProtectedRoute allowedRoles={["Member"]}> <UserLayout /> </ProtectedRoute>}>        <Route path={USER_ROUTES.dashboard} element={<Dashboard />} />
         <Route path={USER_ROUTES.myTasks} element={<MyTasks />} />
         <Route path={USER_ROUTES.projects} element={<Projects />} />
         <Route path={USER_ROUTES.reports} element={<Reports/>}/>
@@ -36,6 +36,7 @@ function App() {
         <Route path={USER_ROUTES.viewProfile} element={<ViewProfile/>}/>
         <Route path={USER_ROUTES.accountSettings} element={<AccountSettings/>}/>
         <Route path={USER_ROUTES.notificationPreferences} element={<NotificationPreferences/>}/>
+        <Route path={USER_ROUTES.projectDetail} element={<ProjectDetail />} />
 
       </Route>
     </Routes>

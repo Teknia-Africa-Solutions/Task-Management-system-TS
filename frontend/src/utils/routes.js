@@ -10,6 +10,8 @@ export const USER_ROUTES = {
    viewProfile: "profile",
   accountSettings: "settings",
   notificationPreferences: "notification-preferences",
+   projectDetail: "projects/:id", 
 };
 
 export const userPath = (key) => `/user/${USER_ROUTES[key]}`;
+export const projectDetailPath = (id) => `/user/projects/${id}`;

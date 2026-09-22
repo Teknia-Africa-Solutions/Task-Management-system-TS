@@ -1,0 +1,26 @@
+const API_URL = "http://localhost:3000/api";
+
+function authHeaders() {
+  const token = localStorage.getItem("token");
+  return { Authorization: `Bearer ${token}` };
+}
+
+export async function getMyProjects() {
+  const res = await fetch(`${API_URL}/projects`, {
+    headers: authHeaders(),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to load projects");
+  return data;
+}
+
+export async function getProjectDetail(id) {
+  const res = await fetch(`${API_URL}/projects/${id}`, {
+    headers: authHeaders(),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to load project");
+  return data;
+}

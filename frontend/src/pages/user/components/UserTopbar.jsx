@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import {userPath} from "../../../utils/routes";
-import { useSearch } from "../../../context/SearchCOntext";
-import {useAuth} from "../../../context/AuthContext";
+import { useNavigate, useLocation } from "react-router-dom";
+import { userPath, USER_ROUTES } from "../../../utils/routes";
+import { useSearch } from "../../../context/SearchContext";
+import { useAuth } from "../../../context/AuthContext";
 
 import {
   Search,
@@ -14,14 +14,35 @@ import {
   BellRing,
   LogOut,
 } from "lucide-react";
+
+// Maps each route segment to what the topbar heading should say
+const pageTitles = {
+  [USER_ROUTES.dashboard]: "Dashboard",
+  [USER_ROUTES.myTasks]: "My Tasks",
+  [USER_ROUTES.projects]: "Projects",
+  [USER_ROUTES.calendar]: "Calendar",
+  [USER_ROUTES.reports]: "Reports",
+  [USER_ROUTES.files]: "Files",
+  [USER_ROUTES.messages]: "Messages",
+  [USER_ROUTES.notifications]: "Notifications",
+  [USER_ROUTES.viewProfile]: "View Profile",
+  [USER_ROUTES.accountSettings]: "Account Settings",
+  [USER_ROUTES.notificationPreferences]: "Notification Preferences",
+};
+
 export default function UserTopbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
-const { searchTerm, setSearchTerm } = useSearch();
-  const {user,logout} = useAuth();
+  const location = useLocation();
+  const { searchTerm, setSearchTerm } = useSearch();
+  const { user, logout } = useAuth();
   const initials = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2);
-  const notificationCount = 3; 
+  const notificationCount = 3;
+
+  // Extract the last segment of the URL, e.g. "/user/my-tasks" -> "my-tasks"
+  const currentSegment = location.pathname.split("/").pop();
+  const pageTitle = pageTitles[currentSegment] || "Dashboard";
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -33,21 +54,22 @@ const { searchTerm, setSearchTerm } = useSearch();
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-const handleLogout = () => {
-  logout();
-  navigate("/login");
-};
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <header className="flex items-center justify-between gap-4 px-6 py-4 bg-white border-b border-black/5">
       <div className="min-w-0 flex-1">
         <h1 className="text-xl font-bold text-[#1F2937]">
-          Dashboard{" "}
-          <span className="font-normal text-[#6B7280]">
-            Welcome Back, {user.name.split(" ")[0]}
-          </span>
+          {pageTitle}{" "}
+          {currentSegment === USER_ROUTES.dashboard && (
+            <span className="font-normal text-[#6B7280]">
+              Welcome Back, {user.name.split(" ")[0]}
+            </span>
+          )}
         </h1>
-        <p className=" hidden text-sm text-[primary]">Here's what's happening with your tasks today.</p>
       </div>
 
       {/* Search */}

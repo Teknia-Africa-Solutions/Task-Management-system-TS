@@ -20,11 +20,10 @@ export default function LoginPage() {
     try {
       const data = await loginUser({ email, password });
       login(data.user, data.token);
-      navigate("/user/dashboard");
 
       //Redirect based on role
       if(data.user.role==="Member"){
-      navigate("/user/Dashboard");
+      navigate("/user/dashboard");
       } else if(data.user.role==="Admin"){
         navigate("/admin/dashboard");
       }

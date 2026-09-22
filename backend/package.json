@@ -13,6 +13,8 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.3",
-    "mysql2": "^3.14.3"
+    "multer": "^2.4.0",
+    "mysql2": "^3.14.3",
+    "socket.io": "^4.8.3"
   }
 }
