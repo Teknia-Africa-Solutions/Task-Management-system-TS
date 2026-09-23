@@ -23,7 +23,7 @@ import { SUPERADMIN_ROUTES } from "./utils/routes";
 import SuperAdminSidebar from "./pages/superadmin/components/SuperAdminSidebar.jsx";
 import UserManagement from "./pages/superadmin/UserManagement.jsx";
 import  SuperAdminDashboard from "./pages/superadmin/Dashboard.jsx"
-
+import ProjectOversight from "./pages/superadmin/ProjectOversight.jsx";
 
 function App() {
   return (
@@ -53,6 +53,8 @@ function App() {
 }>
 <Route path={SUPERADMIN_ROUTES.userManagement} element={<UserManagement/>}/>
 <Route path={SUPERADMIN_ROUTES.dashboard} element={<SuperAdminDashboard/>}/>
+<Route path={SUPERADMIN_ROUTES.projects} element={<ProjectOversight />} />
+
 </Route>
     </Routes>
   );

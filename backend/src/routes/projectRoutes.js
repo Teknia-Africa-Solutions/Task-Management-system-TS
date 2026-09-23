@@ -1,6 +1,7 @@
 const express = require("express");
 const { createPool } = require("../config/db");
 const authMiddleware = require("../middleware/authMiddleware");
+const requireRole = require("../middleware/roleMiddleware");
 
 const router = express.Router();
 const pool = createPool();
@@ -62,6 +63,31 @@ router.get("/:id", authMiddleware, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to load project." });
+  }
+});
+// GET /api/projects/admin/all — every project in the system (SuperAdmin only)
+router.get("/admin/all", authMiddleware, requireRole("SuperAdmin"), async (req, res) => {
+  try {
+    const [projects] = await pool.query(
+      `SELECT
+         p.id,
+         p.name,
+         p.color,
+         creator.name AS createdByName,
+         COUNT(t.id) AS tasksTotal,
+         SUM(t.status = 'Done') AS tasksDone,
+         COUNT(DISTINCT t.assignee_id) AS teamSize
+       FROM projects p
+       LEFT JOIN users creator ON creator.id = p.created_by
+       LEFT JOIN tasks t ON t.project_id = p.id
+       GROUP BY p.id, p.name, p.color, creator.name
+       ORDER BY p.created_at DESC`
+    );
+
+    res.json(projects);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load projects." });
   }
 });
 
