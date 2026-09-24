@@ -1,55 +1,33 @@
-const FAKE_DELAY = 600; 
-
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function getMockUsers() {
-  return JSON.parse(localStorage.getItem("mockUsers") || "[]");
-}
-
-function saveMockUsers(users) {
-  localStorage.setItem("mockUsers", JSON.stringify(users));
-}
+const API_URL = "http://localhost:3000/api";
 
 export async function registerUser({ name, email, password }) {
-  await delay(FAKE_DELAY);
+  const res = await fetch(`${API_URL}/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, password }),
+  });
 
-  const users = getMockUsers();
-  const exists = users.some((u) => u.email === email);
+  const data = await res.json();
 
-  if (exists) {
-    throw new Error("An account with this email already exists.");
+  if (!res.ok) {
+    throw new Error(data.message || "Registration failed");
   }
 
-  const newUser = {
-    id: crypto.randomUUID(),
-    name,
-    email,
-    password, 
-    role: "Member", 
-  };
-
-  users.push(newUser);
-  saveMockUsers(users);
-
-  return { message: "Account created" };
+  return data;
 }
 
 export async function loginUser({ email, password }) {
-  await delay(FAKE_DELAY);
+  const res = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
 
-  const users = getMockUsers();
-  const user = users.find((u) => u.email === email && u.password === password);
+  const data = await res.json();
 
-  if (!user) {
-    throw new Error("Invalid email or password.");
+  if (!res.ok) {
+    throw new Error(data.message || "Login failed");
   }
 
-  const fakeToken = `mock-token-${user.id}`;
-
-  return {
-    token: fakeToken,
-    user: { id: user.id, name: user.name, email: user.email, role: user.role },
-  };
+  return data;
 }

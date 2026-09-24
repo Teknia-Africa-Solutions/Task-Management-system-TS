@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import logo from "../../../assets/logo.png";
 import { userPath } from "../../../utils/routes";
+import { useAuth } from "../../../context/AuthContext";
 
 const navItems = [
   { label: "Dashboard", to: userPath("dashboard"), icon: LayoutDashboard },
@@ -25,8 +26,8 @@ const navItems = [
 ];
 
 export default function UserSidebar({ onClose }) {
-  const user = { name: "Jane Doe", email: "jane@taskflow.io" };
-
+  const {user} = useAuth();
+  if (!user) return null;
   return (
     <aside className="w-64 h-screen flex flex-col bg-[#0B1F0D] text-white">
       <div className="flex items-center justify-between px-5 py-6">

@@ -15,6 +15,15 @@ import  Notifications from "./pages/user/Notifications";
 import ViewProfile from "./pages/user/ViewProfile";
 import AccountSettings from "./pages/user/AccountSettings";
 import NotificationPreferences from "./pages/user/NotificationPreferences.jsx";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ProjectDetail from "./pages/user/ProjectDetail";
+//Super Admin
+import SuperAdminLayout from "./pages/superadmin/SUperAdminLayout.jsx";
+import { SUPERADMIN_ROUTES } from "./utils/routes";
+import SuperAdminSidebar from "./pages/superadmin/components/SuperAdminSidebar.jsx";
+import UserManagement from "./pages/superadmin/UserManagement.jsx";
+import  SuperAdminDashboard from "./pages/superadmin/Dashboard.jsx"
+
 
 function App() {
   return (
@@ -23,7 +32,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      <Route path="/user" element={<UserLayout />}>
+<Route path="/user" element={<ProtectedRoute allowedRoles={["Member"]}> <UserLayout /> </ProtectedRoute>}>      
         <Route path={USER_ROUTES.dashboard} element={<Dashboard />} />
         <Route path={USER_ROUTES.myTasks} element={<MyTasks />} />
         <Route path={USER_ROUTES.projects} element={<Projects />} />
@@ -35,8 +44,16 @@ function App() {
         <Route path={USER_ROUTES.viewProfile} element={<ViewProfile/>}/>
         <Route path={USER_ROUTES.accountSettings} element={<AccountSettings/>}/>
         <Route path={USER_ROUTES.notificationPreferences} element={<NotificationPreferences/>}/>
+        <Route path={USER_ROUTES.projectDetail} element={<ProjectDetail />} />
 
       </Route>
+<Route path="/superadmin" element={<ProtectedRoute allowedRoles={["SuperAdmin"]}>
+  <SuperAdminLayout/>
+</ProtectedRoute>
+}>
+<Route path={SUPERADMIN_ROUTES.userManagement} element={<UserManagement/>}/>
+<Route path={SUPERADMIN_ROUTES.dashboard} element={<SuperAdminDashboard/>}/>
+</Route>
     </Routes>
   );
 }
