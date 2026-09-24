@@ -12,6 +12,9 @@ const pool = createPool();
 app.use(cors());
 app.use(express.json());
 
+const authRoutes = require("./src/routes/authRoutes");
+app.use("/api/auth", authRoutes);
+
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true, service: "task-management-api" });
 });
