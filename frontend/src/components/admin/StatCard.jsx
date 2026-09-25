@@ -2,17 +2,6 @@
 
 import React from 'react';
 
-/**
- * Reusable stat card for dashboard KPIs
- * @param {string} label - Card label (e.g. "Total Users")
- * @param {string|number} value - Main number displayed
- * @param {string} subtext - Small text below the value
- * @param {ReactNode} icon - SVG icon to display
- * @param {string} iconBg - Background color for icon container (default: #E8F4E9)
- * @param {string} iconColor - Color of the icon stroke (default: #05620C)
- * @param {string} subtextColor - Color of subtext (default: #05620C)
- * @param {Function} onClick - Optional click handler
- */
 const StatCard = ({
   label,
   value,
@@ -34,6 +23,8 @@ const StatCard = ({
         boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
         cursor: onClick ? 'pointer' : 'default',
         transition: 'box-shadow 0.2s',
+        minWidth: 0,                    // ← CHANGED: allow shrinking
+        overflow: 'hidden',             // ← CHANGED: prevent content overflow
       }}
       onMouseEnter={(e) => {
         if (onClick) e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
@@ -42,8 +33,8 @@ const StatCard = ({
         if (onClick) e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+        <div style={{ minWidth: 0, flex: 1 }}>    {/* ← CHANGED: allow text to shrink */}
           <p
             style={{
               fontSize: '10px',
@@ -52,6 +43,9 @@ const StatCard = ({
               textTransform: 'uppercase',
               letterSpacing: '0.3px',
               margin: 0,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
             {label}
@@ -60,13 +54,23 @@ const StatCard = ({
             {value}
           </p>
           {subtext && (
-            <p style={{ fontSize: '10px', color: subtextColor, fontWeight: '500', margin: 0 }}>
+            <p
+              style={{
+                fontSize: '10px',
+                color: subtextColor,
+                fontWeight: '500',
+                margin: 0,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
               {subtext}
             </p>
           )}
         </div>
         {icon && (
-          <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: iconBg }}>
+          <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: iconBg, flexShrink: 0 }}>  {/* ← CHANGED: prevent icon from shrinking */}
             <div style={{ color: iconColor, display: 'flex', alignItems: 'center' }}>
               {icon}
             </div>

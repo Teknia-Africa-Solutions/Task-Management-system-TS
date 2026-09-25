@@ -38,12 +38,12 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
   };
 
   return (
-    <div style={{ padding: isMobile ? '12px' : '24px', backgroundColor: '#F8FAF8' }}>
+    <div style={{ padding: isMobile ? '12px' : '24px', backgroundColor: '#F8FAF8', overflowX: 'hidden' }}>
       {/* Statistics Cards */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+          gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, 1fr)', // ← CHANGED
           gap: '12px',
           marginBottom: '20px',
         }}
@@ -105,14 +105,16 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
       </div>
 
       {/* Charts Section */}
-<div style={{ 
-  display: 'grid', 
-  gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr', 
-  gap: '20px', 
-  marginBottom: '24px' 
-}}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'minmax(0, 1fr)' : '2fr 1fr', // ← CHANGED
+          gap: '20px',
+          marginBottom: '24px',
+        }}
+      >
         {/* User Growth Chart */}
-        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)', minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #E8F4E9' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#05620C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -152,7 +154,7 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
         </div>
 
         {/* Task Status Kanban */}
-        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)', minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #E8F4E9' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#05620C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -167,22 +169,24 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
           </div>
 
           <KanbanBoard
-  taskStatusData={taskStatusData}
-  total={total}
-  isMobile={isMobile}
-  onStatusClick={(statusLabel) => onFilterTasks(statusLabel)}
-/>
+            taskStatusData={taskStatusData}
+            total={total}
+            isMobile={isMobile}
+            onStatusClick={(statusLabel) => onFilterTasks(statusLabel)}
+          />
         </div>
       </div>
 
       {/* Bottom Section */}
-<div style={{ 
-  display: 'grid', 
-  gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr', 
-  gap: '20px' 
-}}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'minmax(0, 1fr)' : '1fr 1fr 1fr', // ← CHANGED
+          gap: '20px',
+        }}
+      >
         {/* Team Workload */}
-        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)', minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #E8F4E9' }}>
             <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1F2937', margin: 0 }}>Team Workload</h3>
             <span style={{ fontSize: '12px', color: '#6B7280' }}>Current</span>
@@ -210,7 +214,7 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
         </div>
 
         {/* Attention Required */}
-        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)', minWidth: 0 }}>
           <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1F2937', marginBottom: '16px' }}>Attention Required</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', backgroundColor: '#F8FAF8', borderRadius: '8px' }}>
@@ -229,26 +233,26 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
         </div>
 
         {/* Recent Activity */}
-        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)', minWidth: 0 }}>
           <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1F2937', marginBottom: '16px' }}>Recent Activity</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 12px', backgroundColor: '#F8FAF8', borderRadius: '8px' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#05620C', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '600' }}>NA</div>
-              <div>
+              <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#05620C', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '600', flexShrink: 0 }}>NA</div>
+              <div style={{ minWidth: 0 }}>
                 <p style={{ fontSize: '12px', color: '#1F2937', margin: 0 }}><strong>Nova Admin</strong> created a new project</p>
                 <p style={{ fontSize: '11px', color: '#6B7280', margin: 0 }}>10 minutes ago</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 12px', backgroundColor: '#F8FAF8', borderRadius: '8px' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#96AF25', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '600' }}>JD</div>
-              <div>
+              <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#96AF25', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '600', flexShrink: 0 }}>JD</div>
+              <div style={{ minWidth: 0 }}>
                 <p style={{ fontSize: '12px', color: '#1F2937', margin: 0 }}><strong>Jane Doe</strong> assigned a task</p>
                 <p style={{ fontSize: '11px', color: '#6B7280', margin: 0 }}>25 minutes ago</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 12px', backgroundColor: '#F8FAF8', borderRadius: '8px' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#FF883E', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '600' }}>MJ</div>
-              <div>
+              <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#FF883E', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '600', flexShrink: 0 }}>MJ</div>
+              <div style={{ minWidth: 0 }}>
                 <p style={{ fontSize: '12px', color: '#1F2937', margin: 0 }}><strong>Mike Johnson</strong> completed a task</p>
                 <p style={{ fontSize: '11px', color: '#6B7280', margin: 0 }}>1 hour ago</p>
               </div>

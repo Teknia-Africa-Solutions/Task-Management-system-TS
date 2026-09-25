@@ -7,15 +7,21 @@ const KanbanBoard = ({ taskStatusData, total, isMobile, onStatusClick }) => {
     <>
       {/* Kanban Mini-Board Grid */}
       <div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: isMobile ? 'repeat(5, 90px)' : 'repeat(5, 1fr)',
-    gap: '8px',
-    minHeight: '180px',
-    overflowX: 'auto',
-    paddingBottom: '8px',
-  }}
->
+        style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'repeat(5, 100px)' : 'repeat(5, 1fr)',  // ← slightly wider cards
+          gap: '8px',
+          minHeight: '180px',
+          overflowX: 'auto',
+          paddingBottom: '12px',
+          WebkitOverflowScrolling: 'touch',     // ← smooth scroll on iOS
+          scrollbarWidth: 'thin',               // ← thin scrollbar on Firefox
+          scrollbarColor: '#05620C #E8F4E9',    // ← green scrollbar (Firefox)
+          scrollSnapType: isMobile ? 'x mandatory' : 'none',  // ← swipe snapping on mobile
+          paddingLeft: '2px',
+          paddingRight: '2px',
+        }}
+      >
         {taskStatusData.map((status, index) => {
           const percentage = total > 0 ? Math.round((status.count / total) * 100) : 0;
 
@@ -36,6 +42,8 @@ const KanbanBoard = ({ taskStatusData, total, isMobile, onStatusClick }) => {
                 border: '2px solid transparent',
                 position: 'relative',
                 minHeight: '140px',
+                scrollSnapAlign: isMobile ? 'start' : 'none',  // ← snap alignment
+                flexShrink: 0,                                  // ← prevent squishing
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = status.color;
@@ -75,6 +83,10 @@ const KanbanBoard = ({ taskStatusData, total, isMobile, onStatusClick }) => {
                   textAlign: 'center',
                   lineHeight: '1.2',
                   marginBottom: '4px',
+                  whiteSpace: 'nowrap',       // ← prevent wrapping
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%',
                 }}
               >
                 {status.label}
@@ -127,13 +139,15 @@ const KanbanBoard = ({ taskStatusData, total, isMobile, onStatusClick }) => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '4px',
         }}
       >
         <span style={{ fontSize: '12px', color: '#6B7280' }}>
           Total Tasks: <strong style={{ color: '#1F2937' }}>{total}</strong>
         </span>
         <span style={{ fontSize: '11px', color: '#05620C', fontWeight: '500' }}>
-          Click a status to filter →
+          {isMobile ? '← Swipe →' : 'Click a status to filter →'}
         </span>
       </div>
     </>

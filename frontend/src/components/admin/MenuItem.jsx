@@ -15,8 +15,8 @@ const MenuItem = ({ item, isActive, onClick, sidebarOpen }) => {
         width: '100%',
         border: 'none',
         cursor: 'pointer',
-        backgroundColor: isActive ? '#96AF25' : 'transparent',
-        color: isActive ? '#05620C' : '#E8F4E9',
+        backgroundColor: isActive ? '#FF883E' : 'transparent',
+color: isActive ? 'white' : '#E8F4E9',
         justifyContent: sidebarOpen ? 'flex-start' : 'center',
         transition: 'all 0.2s',
         fontSize: '13px',
@@ -31,7 +31,7 @@ const MenuItem = ({ item, isActive, onClick, sidebarOpen }) => {
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
-          color: isActive ? '#05620C' : '#E8F4E9',
+         color: isActive ? 'white' : '#E8F4E9',
         }}
       >
         {item.icon}

@@ -22,9 +22,9 @@ const AdminSidebar = ({
         bottom: 0,
         zIndex: 50,
         width: isMobile ? 280 : sidebarOpen ? 260 : 72,
-        backgroundColor: '#034A09',
+        backgroundColor: '#0B1F0D',
         color: 'white',
-        borderRight: '1px solid #034A09',
+        borderRight: '1px solid #0B1F0D',
         display: 'flex',
         flexDirection: 'column',
         transition: 'all 0.3s ease',
@@ -39,32 +39,25 @@ const AdminSidebar = ({
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
-          padding: '16px',
-          borderBottom: '1px solid #034A09',
+          padding: '12px 16px',
+          borderBottom: '1px solid #0B1F0D',
           justifyContent: sidebarOpen ? 'flex-start' : 'center',
         }}
       >
-        <div
-          style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '10px',
-            backgroundColor: '#96AF25',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: '700',
-            fontSize: '16px',
-            flexShrink: 0,
-            color: '#05620C',
-          }}
-        >
-          TF
-        </div>
+        <img
+  src="/tekniafrica-logo-transparent.png"
+  alt="Tekniaafrica"
+  style={{
+    width: '60px',
+    height: '60px',
+    objectFit: 'contain',
+    flexShrink: 0,
+  }}
+/>
         {sidebarOpen && (
           <div>
-            <h1 style={{ fontWeight: '700', fontSize: '18px', color: 'white', margin: 0 }}>TaskFlow</h1>
-            <p style={{ fontSize: '10px', color: '#96AF25', margin: 0 }}>Admin Dashboard</p>
+            <h1 style={{ fontWeight: '700', fontSize: '14px', color: 'white', margin: 0 }}>TaskFlow</h1>
+            <p style={{ fontSize: '10px', color: '#e3e6da', margin: 0 }}>Admin Dashboard</p>
           </div>
         )}
       </div>
@@ -118,7 +111,7 @@ const AdminSidebar = ({
       {/* Profile + Logout */}
       <div
         style={{
-          borderTop: '1px solid #034A09',
+          borderTop: '1px solid #0B1F0D',
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
