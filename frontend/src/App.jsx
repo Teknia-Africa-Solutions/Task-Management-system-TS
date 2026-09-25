@@ -15,17 +15,15 @@ import Notifications from "./pages/user/Notifications";
 import ViewProfile from "./pages/user/ViewProfile";
 import AccountSettings from "./pages/user/AccountSettings";
 import NotificationPreferences from "./pages/user/NotificationPreferences.jsx";
-import AdminDashboard from './pages/Admin/AdminDashboard';
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
 function App() {
   return (
     <Routes>
-      {/* Public routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      {/* User routes */}
       <Route path="/user" element={<UserLayout />}>
         <Route path={USER_ROUTES.dashboard} element={<Dashboard />} />
         <Route path={USER_ROUTES.myTasks} element={<MyTasks />} />
@@ -40,7 +38,6 @@ function App() {
         <Route path={USER_ROUTES.notificationPreferences} element={<NotificationPreferences />} />
       </Route>
 
-      {/* ✅ ADMIN ROUTE - ADDED */}
       <Route path="/admin/*" element={<AdminDashboard />} />
     </Routes>
   );

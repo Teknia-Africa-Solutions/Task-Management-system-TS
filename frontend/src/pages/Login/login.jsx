@@ -20,13 +20,12 @@ export default function LoginPage() {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       //Redirect based on role
-      if(data.user.role==="Member"){
-      navigate("/user/Dashboard");
-      } else if(data.user.role==="Admin"){
-        navigate("/admin/dashboard");
-      }
-      else if(data.user.role==="SuperAdmin"){
-        navigate("/superadmin/dashboard");
+      if (data.user.role === "Member") {
+        navigate("/user/dashboard");
+      } else if (data.user.role === "Admin" || data.user.role === "SuperAdmin") {
+        navigate("/admin");
+      } else {
+        setError("This account does not have a dashboard yet.");
       }
     } catch (err) {
       setError(err.message);
