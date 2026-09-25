@@ -78,6 +78,9 @@ app.use("/api/users", userRoutes);
 const dashboardRoutes = require("./src/routes/dashboardRoutes");
 app.use("/api/dashboard", dashboardRoutes);
 
+const settingsRoutes = require("./src/routes/settingsRoutes");
+app.use("/api/settings", settingsRoutes);
+
 httpServer.listen(PORT, () => {
   console.log(`API running on http://localhost:${PORT}`);
 });
