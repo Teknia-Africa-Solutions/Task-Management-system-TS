@@ -57,7 +57,7 @@ const AdminSidebar = ({
         {sidebarOpen && (
           <div>
             <h1 style={{ fontWeight: '700', fontSize: '14px', color: 'white', margin: 0 }}>TaskFlow</h1>
-            <p style={{ fontSize: '10px', color: '#e3e6da', margin: 0 }}>Admin Dashboard</p>
+            <p style={{ fontSize: '10px', color: '#f3f5ec', margin: 0 }}>Admin Dashboard</p>
           </div>
         )}
       </div>
@@ -146,7 +146,7 @@ const AdminSidebar = ({
           {sidebarOpen && (
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: '13px', fontWeight: '500', color: 'white', margin: 0 }}>Admin</p>
-              <p style={{ fontSize: '11px', color: '#96AF25', margin: 0 }}>Administrator</p>
+              <p style={{ fontSize: '11px', color: '#f8f9f3', margin: 0 }}>Administrator</p>
             </div>
           )}
         </div>
