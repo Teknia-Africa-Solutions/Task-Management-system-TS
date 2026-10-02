@@ -31,3 +31,20 @@ export async function sendMessage(conversationId, text) {
   if (!res.ok) throw new Error(data.message || "Failed to send message");
   return data;
 }
+export async function getAllUsersForChat() {
+  const res = await fetch(`${API_URL}/conversations/users`, { headers: authHeaders() });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to load users");
+  return data;
+}
+
+export async function startConversation(otherUserId) {
+  const res = await fetch(`${API_URL}/conversations/start`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+    body: JSON.stringify({ otherUserId }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to start conversation");
+  return data;
+}

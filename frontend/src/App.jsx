@@ -24,6 +24,7 @@ import SuperAdminSidebar from "./pages/superadmin/components/SuperAdminSidebar.j
 import UserManagement from "./pages/superadmin/UserManagement.jsx";
 import  SuperAdminDashboard from "./pages/superadmin/Dashboard.jsx"
 import ProjectOversight from "./pages/superadmin/ProjectOversight.jsx";
+import Settings from "./pages/superadmin/Settings.jsx"
 
 function App() {
   return (
@@ -54,7 +55,7 @@ function App() {
 <Route path={SUPERADMIN_ROUTES.userManagement} element={<UserManagement/>}/>
 <Route path={SUPERADMIN_ROUTES.dashboard} element={<SuperAdminDashboard/>}/>
 <Route path={SUPERADMIN_ROUTES.projects} element={<ProjectOversight />} />
-
+<Route path={SUPERADMIN_ROUTES.settings} element={<AccountSettings/>}/>
 </Route>
     </Routes>
   );
