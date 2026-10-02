@@ -6,7 +6,7 @@ import {
   ClipboardList,
   Settings,
   BarChart2,
-} from "lucide-react"; // flagging: verify these exact names exist in your installed lucide-react
+} from "lucide-react"; 
 import logo from "../../../assets/logo.png";
 import { superAdminPath } from "../../../utils/routes";
 import { useAuth } from "../../../context/AuthContext";
@@ -15,7 +15,6 @@ const navItems = [
   { label: "Dashboard", to: superAdminPath("dashboard"), icon: LayoutDashboard },
   { label: "User Management", to: superAdminPath("userManagement"), icon: Users },
   { label: "Projects", to: superAdminPath("projects"), icon: FolderKanban },
-  { label: "Audit Log", to: superAdminPath("auditLog"), icon: ClipboardList },
   { label: "Reports", to: superAdminPath("reports"), icon: BarChart2 },
   { label: "Settings", to: superAdminPath("settings"), icon: Settings },
 ];
@@ -43,7 +42,7 @@ export default function SuperAdminSidebar({ onClose }) {
         )}
       </div>
 
-      <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 py-2 space-y-10 overflow-y-auto">
         {navItems.map(({ label, to, icon: Icon }) => (
           <NavLink
             key={to}
