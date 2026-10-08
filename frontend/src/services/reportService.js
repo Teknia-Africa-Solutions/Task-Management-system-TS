@@ -11,3 +11,10 @@ export async function getReportSummary() {
   if (!res.ok) throw new Error(data.message || "Failed to load report data");
   return data;
 }
+
+export async function getSuperAdminReportSummary() {
+  const res = await fetch(`${API_URL}/reports/superadmin/summary`, { headers: authHeaders() });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to load report data");
+  return data;
+}

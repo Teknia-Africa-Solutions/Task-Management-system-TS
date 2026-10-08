@@ -25,6 +25,7 @@ import UserManagement from "./pages/superadmin/UserManagement.jsx";
 import  SuperAdminDashboard from "./pages/superadmin/Dashboard.jsx"
 import ProjectOversight from "./pages/superadmin/ProjectOversight.jsx";
 import Settings from "./pages/superadmin/Settings.jsx"
+import SuperAdminReports  from "./pages/superadmin/Reports.jsx";
 
 function App() {
   return (
@@ -55,7 +56,8 @@ function App() {
 <Route path={SUPERADMIN_ROUTES.userManagement} element={<UserManagement/>}/>
 <Route path={SUPERADMIN_ROUTES.dashboard} element={<SuperAdminDashboard/>}/>
 <Route path={SUPERADMIN_ROUTES.projects} element={<ProjectOversight />} />
-<Route path={SUPERADMIN_ROUTES.settings} element={<AccountSettings/>}/>
+<Route path={SUPERADMIN_ROUTES.settings} element={<Settings/>}/>
+<Route path={SUPERADMIN_ROUTES.reports} element={<SuperAdminReports/>}/>
 </Route>
     </Routes>
   );

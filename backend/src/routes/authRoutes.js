@@ -19,10 +19,22 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
+
+    const [[regSetting]] = await pool.query(
+      "SELECT `value` FROM settings WHERE `key` = 'allow_self_registration'"
+    );
+    if (regSetting?.value === "false") {
+      return res.status(403).json({ message: "Self-registration is currently disabled." });
+    }
+
     const [existing] = await pool.query("SELECT id FROM users WHERE email = ?", [email]);
     if (existing.length > 0) {
       return res.status(409).json({ message: "An account with this email already exists." });
     }
+    const [[roleSetting]] = await pool.query(
+      "SELECT `value` FROM settings WHERE `key` = 'default_signup_role'"
+    );
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -67,6 +79,13 @@ const passwordMatches = await bcrypt.compare(password, user.password);
     if (!passwordMatches) {
       return res.status(401).json({ message: "Invalid email or password." });
     }
+
+const [[maintenanceSetting]] = await pool.query(
+      "SELECT `value` FROM settings WHERE `key` = 'maintenance_mode'"
+    );
+    if (maintenanceSetting?.value === "true" && user.role !== "SuperAdmin") {
+      return res.status(503).json({ message: "The system is currently under maintenance. Please try again later." });
+  }
 
     const token = jwt.sign(
       { id: user.id, role: user.role },

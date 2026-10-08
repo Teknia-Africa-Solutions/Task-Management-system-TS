@@ -44,3 +44,19 @@ export async function updateUserStatus(userId, isActive) {
   if (!res.ok) throw new Error(data.message || "Failed to update user status");
   return data;
 }
+
+//profile update
+export async function updateMyProfile({name,email,password}){
+  const res = await fetch(`${API_URL}/users/me`, {
+    method: "PATCH",
+    headers: {
+      ...authHeaders(),
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, email, password })
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to update profile");
+  return data;
+}

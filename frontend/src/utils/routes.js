@@ -20,7 +20,6 @@ export const SUPERADMIN_ROUTES = {
   settings: "settings",
   reports: "reports",
 };
-
 export const superAdminPath = (key) => `/superadmin/${SUPERADMIN_ROUTES[key]}`;
 
 

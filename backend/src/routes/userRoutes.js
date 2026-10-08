@@ -42,7 +42,7 @@ router.patch("/:id/role", authMiddleware, requireRole("SuperAdmin"), async (req,
   }
 });
 
-// POST /api/users — create a new account directly (SuperAdmin only)
+// POST /api/users — create a new account directly
 router.post("/", authMiddleware, requireRole("SuperAdmin"), async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -79,6 +79,60 @@ router.post("/", authMiddleware, requireRole("SuperAdmin"), async (req, res) => 
     res.status(500).json({ message: "Failed to create user." });
   }
 });
+
+// PATCH /api/users/me —
+router.patch("/me", authMiddleware, async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    const userId = req.user.id;
+
+    if (!name && !email && !password) {
+      return res.status(400).json({ message: "Nothing to update." });
+    }
+
+    if (email) {
+      const [existing] = await pool.query(
+        "SELECT id FROM users WHERE email = ? AND id != ?",
+        [email, userId]
+      );
+      if (existing.length > 0) {
+        return res.status(409).json({ message: "That email is already in use." });
+      }
+    }
+
+    const fieldsToUpdate = [];
+    const values = [];
+
+    if (name) {
+      fieldsToUpdate.push("name = ?");
+      values.push(name);
+    }
+    if (email) {
+      fieldsToUpdate.push("email = ?");
+      values.push(email);
+    }
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      fieldsToUpdate.push("password = ?");
+      values.push(hashedPassword);
+    }
+
+    values.push(userId);
+
+    await pool.query(`UPDATE users SET ${fieldsToUpdate.join(", ")} WHERE id = ?`, values);
+
+    const [[updatedUser]] = await pool.query(
+      "SELECT id, name, email, role FROM users WHERE id = ?",
+      [userId]
+    );
+
+    res.json(updatedUser);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to update profile." });
+  }
+});
+
 // PATCH /api/users/:id/status — activate or deactivate an account (SuperAdmin only)
 router.patch("/:id/status", authMiddleware, requireRole("SuperAdmin"), async (req, res) => {
   try {
