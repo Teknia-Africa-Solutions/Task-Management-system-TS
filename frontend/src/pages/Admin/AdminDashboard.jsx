@@ -856,7 +856,12 @@ const renderAddTaskModal = () => (
   <Reports isMobile={isMobile} />
 );
       
-      case 'audit': return <AuditLogs searchTerm={searchTerm} />;
+      case 'audit': return (
+  <AuditLogs
+    isMobile={isMobile}
+    searchTerm={searchTerm}
+  />
+);
    case 'profile': return <Profile onToast={showToast} />;
       default: return (
   <Dashboard
