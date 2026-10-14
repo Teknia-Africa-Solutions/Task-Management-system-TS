@@ -788,20 +788,16 @@ const renderAddTaskModal = () => (
 );
     case 'users': return (
   <Users
-    users={users}
-    stats={stats}
-    isMobile={isMobile}   
+    isMobile={isMobile}
     searchTerm={searchTerm}
-    userFilter={userFilter}
-    setUserFilter={setUserFilter}
     onAddUser={() => setIsAddUserModalOpen(true)}
-    onToggleStatus={handleToggleUserStatus}
     onDelete={(id) => {
       setConfirmAction({ type: 'deleteUser', id });
       setIsConfirmModalOpen(true);
     }}
   />
 );
+
   case 'teams': return (
   <Teams
     teams={teams}
