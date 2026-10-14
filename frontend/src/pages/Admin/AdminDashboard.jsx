@@ -825,27 +825,18 @@ const renderAddTaskModal = () => (
   />
 );
 
-     case 'tasks': return (
+    case 'tasks': return (
   <Tasks
-    tasks={tasks}
+    isMobile={isMobile}
     searchTerm={searchTerm}
-    taskFilter={taskFilter}
-    setTaskFilter={setTaskFilter}
-    lastSaved={lastSaved}
-    isSaving={isSaving}
-    onSave={handleSaveChanges}
     onCreate={() => setIsAddTaskModalOpen(true)}
-    onUpdateStatus={handleUpdateTaskStatus}
-    onUpdatePriority={(id, priority) => {
-      setTasks(tasks.map((t) => (t.id === id ? { ...t, priority } : t)));
-      showToast('Priority updated!');
-    }}
     onDelete={(id) => {
       setConfirmAction({ type: 'deleteTask', id });
       setIsConfirmModalOpen(true);
     }}
   />
 );
+
      case 'calendar': return <Calendar />;
     case 'files': return (
   <Files
