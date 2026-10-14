@@ -855,16 +855,11 @@ const renderAddTaskModal = () => (
     fileInputRef={fileInputRef}
   />
 );
+
    case 'notifications': return (
-  <Notifications
-    notifications={notifications}
-    notificationFilter={notificationFilter}
-    setNotificationFilter={setNotificationFilter}
-    onMarkAllRead={handleMarkAllRead}
-    onMarkRead={handleMarkNotificationRead}
-    onDelete={handleDeleteNotification}
-  />
+  <Notifications isMobile={isMobile} />
 );
+
     case 'reports': return (
   <Reports
     tasks={tasks}
