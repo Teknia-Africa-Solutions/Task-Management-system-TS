@@ -1,10 +1,79 @@
 // frontend/src/pages/Admin/Dashboard.jsx
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import StatCard from '../../components/admin/StatCard';
 import KanbanBoard from '../../components/admin/KanbanBoard';
+import { adminApi } from '../../services/adminApi';
 
-const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks }) => {
+const Dashboard = ({ isMobile, onNavigate, onFilterTasks }) => {
+  const [users, setUsers] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    Promise.all([
+      adminApi.getUsers(),
+      adminApi.getTasks(),
+      adminApi.getProjects(),
+      adminApi.getReportsSummary(),
+    ])
+      .then(([usersData, tasksData, projectsData, summaryData]) => {
+        setUsers(usersData);
+        setTasks(tasksData);
+        setProjects(projectsData);
+        setSummary(summaryData);
+        setError(null);
+      })
+      .catch((err) => {
+        console.error('Failed to load dashboard:', err);
+        setError(err.message);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  // NOTE: statuses match your DB: Todo, In Progress, Review, Done
+  const taskStatusData = [
+    { label: 'Todo', count: tasks.filter((t) => t.status === 'Todo').length, color: '#05620C', bgColor: '#F3F4F6' },
+    { label: 'In Progress', count: tasks.filter((t) => t.status === 'In Progress').length, color: '#84CC16', bgColor: '#DBEAFE' },
+    { label: 'Review', count: tasks.filter((t) => t.status === 'Review').length, color: '#F59E0B', bgColor: '#FEF3C7' },
+    { label: 'Done', count: tasks.filter((t) => t.status === 'Done').length, color: '#EAB308', bgColor: '#D1FAE5' },
+  ];
+
+  const total = taskStatusData.reduce((acc, d) => acc + d.count, 0);
+
+  const stats = {
+    totalUsers: users.length,
+    activeUsers: users.length,
+    totalTasks: tasks.length,
+    completedTasks: tasks.filter((t) => t.status === 'Done').length,
+    activeProjects: projects.length,
+    atRiskProjects: 0,
+    overdueTasks: summary?.overdueTasks || 0,
+    inactiveUsers: 0,
+  };
+
+  if (loading) {
+    return (
+      <div style={{ padding: '60px', textAlign: 'center', color: '#6B7280' }}>
+        <p>Loading dashboard...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: '60px', textAlign: 'center', color: '#EF4444' }}>
+        <p><strong>Error:</strong> {error}</p>
+        <p style={{ fontSize: '13px', color: '#6B7280' }}>
+          Make sure the backend is running and you're logged in.
+        </p>
+      </div>
+    );
+  }
+
   const userGrowthData = [
     { month: 'Jan', users: 45 },
     { month: 'Feb', users: 52 },
@@ -16,34 +85,13 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
     { month: 'Aug', users: 156 },
   ];
 
-  const taskStatusData = [
-    { label: 'Blocked', count: tasks.filter((t) => t.status === 'Blocked').length, color: '#05620C', bgColor: '#F3F4F6' },
-    { label: 'Pending', count: tasks.filter((t) => t.status === 'Pending').length, color: '#F59E0B', bgColor: '#FEF3C7' },
-    { label: 'In Progress', count: tasks.filter((t) => t.status === 'In Progress').length, color: '#84CC16', bgColor: '#DBEAFE' },
-    { label: 'Completed', count: tasks.filter((t) => t.status === 'Completed').length, color: '#EAB308', bgColor: '#D1FAE5' },
-    { label: 'Overdue', count: tasks.filter((t) => t.status === 'Overdue').length, color: '#000000', bgColor: '#FEE2E2' },
-  ];
-
-  const total = taskStatusData.reduce((acc, d) => acc + d.count, 0);
-
-  const stats = {
-    totalUsers: users.length,
-    activeUsers: users.filter((u) => u.status === 'Active').length,
-    totalTasks: tasks.length,
-    completedTasks: tasks.filter((t) => t.status === 'Completed').length,
-    activeProjects: projects.filter((p) => p.status === 'In Progress' || p.status === 'Active').length,
-    atRiskProjects: projects.filter((p) => p.status === 'On Hold' || p.progress < 50).length,
-    overdueTasks: tasks.filter((t) => t.status === 'Overdue').length,
-    inactiveUsers: users.filter((u) => u.status !== 'Active').length,
-  };
-
   return (
     <div style={{ padding: isMobile ? '12px' : '24px', backgroundColor: '#F8FAF8', overflowX: 'hidden' }}>
       {/* Statistics Cards */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, 1fr)', // ← CHANGED
+          gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, 1fr)',
           gap: '12px',
           marginBottom: '20px',
         }}
@@ -108,7 +156,7 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? 'minmax(0, 1fr)' : '2fr 1fr', // ← CHANGED
+          gridTemplateColumns: isMobile ? 'minmax(0, 1fr)' : '2fr 1fr',
           gap: '20px',
           marginBottom: '24px',
         }}
@@ -181,7 +229,7 @@ const Dashboard = ({ users, tasks, projects, isMobile, onNavigate, onFilterTasks
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? 'minmax(0, 1fr)' : '1fr 1fr 1fr', // ← CHANGED
+          gridTemplateColumns: isMobile ? 'minmax(0, 1fr)' : '1fr 1fr 1fr',
           gap: '20px',
         }}
       >

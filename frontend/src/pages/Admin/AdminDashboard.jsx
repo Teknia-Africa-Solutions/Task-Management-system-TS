@@ -773,11 +773,8 @@ const renderAddTaskModal = () => (
 
   const renderContent = () => {
     switch(activeTab) {
-      case 'dashboard': return (
+     case 'dashboard': return (
   <Dashboard
-    users={users}
-    tasks={tasks}
-    projects={projects}
     isMobile={isMobile}
     onNavigate={(tab) => setActiveTab(tab)}
     onFilterTasks={(status) => {
@@ -865,9 +862,6 @@ const renderAddTaskModal = () => (
    case 'profile': return <Profile onToast={showToast} />;
       default: return (
   <Dashboard
-    users={users}
-    tasks={tasks}
-    projects={projects}
     isMobile={isMobile}
     onNavigate={(tab) => setActiveTab(tab)}
     onFilterTasks={(status) => {
