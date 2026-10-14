@@ -826,10 +826,12 @@ const renderAddTaskModal = () => (
   />
 );
 
-     case 'calendar': return <Calendar />;
+     case 'calendar': return <Calendar isMobile={isMobile} />;
+
     case 'files': return (
   <Files
     files={files}
+     isMobile={isMobile} 
     searchTerm={searchTerm}
     fileTypeFilter={fileTypeFilter}
     setFileTypeFilter={setFileTypeFilter}
