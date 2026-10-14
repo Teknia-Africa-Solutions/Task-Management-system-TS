@@ -1,5 +1,5 @@
 // backend/src/routes/adminAuditLogRoutes.js
-// Note: Requires an `audit_logs` table. If it doesn't exist, we'll create one.
+// Note: No `audit_logs` table exists. Uses `task_activity` as audit trail.
 
 const express = require("express");
 const { createPool } = require("../config/db");
@@ -13,13 +13,14 @@ const pool = createPool();
 router.get("/", authMiddleware, requireRole("SuperAdmin"), async (req, res) => {
   try {
     const [logs] = await pool.query(
-      `SELECT al.id, al.action, al.resource, al.description, al.status,
-              DATE_FORMAT(al.created_at, '%Y-%m-%d') AS date,
-              DATE_FORMAT(al.created_at, '%H:%i:%s') AS time,
-              u.name AS user_name
-       FROM audit_logs al
-       LEFT JOIN users u ON al.user_id = u.id
-       ORDER BY al.created_at DESC
+      `SELECT ta.id, ta.action, ta.description,
+              ta.created_at,
+              u.name AS user_name,
+              t.title AS task_title
+       FROM task_activity ta
+       LEFT JOIN users u ON ta.user_id = u.id
+       LEFT JOIN tasks t ON ta.task_id = t.id
+       ORDER BY ta.created_at DESC
        LIMIT 200`
     );
     res.json(logs);

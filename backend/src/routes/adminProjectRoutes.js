@@ -12,12 +12,11 @@ const pool = createPool();
 router.get("/", authMiddleware, requireRole("SuperAdmin", "Admin"), async (req, res) => {
   try {
     const [projects] = await pool.query(
-      `SELECT p.id, p.name, p.description, p.status, p.priority,
-              DATE_FORMAT(p.deadline, '%Y-%m-%d') AS deadline,
-              p.manager_id, u.name AS manager_name,
+      `SELECT p.id, p.name, p.description, p.color,
+              p.created_by, u.name AS creator_name,
               p.created_at
        FROM projects p
-       LEFT JOIN users u ON p.manager_id = u.id
+       LEFT JOIN users u ON p.created_by = u.id
        ORDER BY p.created_at DESC`
     );
     res.json(projects);
@@ -30,28 +29,20 @@ router.get("/", authMiddleware, requireRole("SuperAdmin", "Admin"), async (req, 
 // POST /api/admin/projects
 router.post("/", authMiddleware, requireRole("SuperAdmin", "Admin"), async (req, res) => {
   try {
-    const { name, description, status, priority, deadline, manager_id } = req.body;
+    const { name, description, color } = req.body;
 
     if (!name) {
       return res.status(400).json({ message: "Project name is required." });
     }
 
     const [result] = await pool.query(
-      `INSERT INTO projects (name, description, status, priority, deadline, manager_id)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [
-        name,
-        description || null,
-        status || "In Progress",
-        priority || "Medium",
-        deadline || null,
-        manager_id || null,
-      ]
+      "INSERT INTO projects (name, description, color, created_by) VALUES (?, ?, ?, ?)",
+      [name, description || null, color || "#05620C", req.user.id]
     );
 
     res.status(201).json({
       message: "Project created successfully.",
-      project: { id: result.insertId, name, description, status, priority, deadline },
+      project: { id: result.insertId, name, description, color },
     });
   } catch (err) {
     console.error(err);

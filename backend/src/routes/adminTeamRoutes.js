@@ -1,5 +1,5 @@
 // backend/src/routes/adminTeamRoutes.js
-// Note: This assumes a `teams` table exists. If not, we'll need to create one.
+// Note: No `teams` table exists. Uses `project_members` as "teams".
 
 const express = require("express");
 const { createPool } = require("../config/db");
@@ -9,17 +9,49 @@ const requireRole = require("../middleware/roleMiddleware");
 const router = express.Router();
 const pool = createPool();
 
-// GET /api/admin/teams
+// GET /api/admin/teams — Returns project teams (users grouped by project)
 router.get("/", authMiddleware, requireRole("SuperAdmin", "Admin"), async (req, res) => {
   try {
-    const [teams] = await pool.query(
-      `SELECT t.id, t.name, t.description, t.manager_id,
-              u.name AS manager_name,
-              t.created_at
-       FROM teams t
-       LEFT JOIN users u ON t.manager_id = u.id
-       ORDER BY t.created_at DESC`
+    const [rows] = await pool.query(
+      `SELECT p.id AS project_id, p.name AS project_name, p.color,
+              u.id AS user_id, u.name AS user_name, u.email,
+              u.role, pm.joined_at
+       FROM project_members pm
+       JOIN projects p ON pm.project_id = p.id
+       JOIN users u ON pm.user_id = u.id
+       ORDER BY p.name, u.name`
     );
+
+    // Group users by project
+    const teams = rows.reduce((acc, row) => {
+      const existing = acc.find((t) => t.project_id === row.project_id);
+      if (existing) {
+        existing.members.push({
+          id: row.user_id,
+          name: row.user_name,
+          email: row.email,
+          role: row.role,
+          joined_at: row.joined_at,
+        });
+      } else {
+        acc.push({
+          project_id: row.project_id,
+          project_name: row.project_name,
+          color: row.color,
+          members: [
+            {
+              id: row.user_id,
+              name: row.user_name,
+              email: row.email,
+              role: row.role,
+              joined_at: row.joined_at,
+            },
+          ],
+        });
+      }
+      return acc;
+    }, []);
+
     res.json(teams);
   } catch (err) {
     console.error(err);
@@ -27,43 +59,46 @@ router.get("/", authMiddleware, requireRole("SuperAdmin", "Admin"), async (req, 
   }
 });
 
-// POST /api/admin/teams
-router.post("/", authMiddleware, requireRole("SuperAdmin", "Admin"), async (req, res) => {
+// POST /api/admin/teams/:projectId/members — Add a member to a project
+router.post("/:projectId/members", authMiddleware, requireRole("SuperAdmin", "Admin"), async (req, res) => {
   try {
-    const { name, description, manager_id } = req.body;
+    const { userId } = req.body;
+    const { projectId } = req.params;
 
-    if (!name) {
-      return res.status(400).json({ message: "Team name is required." });
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required." });
     }
 
-    const [result] = await pool.query(
-      "INSERT INTO teams (name, description, manager_id) VALUES (?, ?, ?)",
-      [name, description || null, manager_id || null]
+    await pool.query(
+      "INSERT IGNORE INTO project_members (project_id, user_id) VALUES (?, ?)",
+      [projectId, userId]
     );
 
-    res.status(201).json({
-      message: "Team created successfully.",
-      team: { id: result.insertId, name, description, manager_id },
-    });
+    res.json({ message: "Member added to project." });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Failed to create team." });
+    res.status(500).json({ message: "Failed to add member." });
   }
 });
 
-// DELETE /api/admin/teams/:id
-router.delete("/:id", authMiddleware, requireRole("SuperAdmin"), async (req, res) => {
+// DELETE /api/admin/teams/:projectId/members/:userId — Remove a member
+router.delete("/:projectId/members/:userId", authMiddleware, requireRole("SuperAdmin"), async (req, res) => {
   try {
-    const [result] = await pool.query("DELETE FROM teams WHERE id = ?", [req.params.id]);
+    const { projectId, userId } = req.params;
+
+    const [result] = await pool.query(
+      "DELETE FROM project_members WHERE project_id = ? AND user_id = ?",
+      [projectId, userId]
+    );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Team not found." });
+      return res.status(404).json({ message: "Membership not found." });
     }
 
-    res.json({ message: "Team deleted successfully." });
+    res.json({ message: "Member removed from project." });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Failed to delete team." });
+    res.status(500).json({ message: "Failed to remove member." });
   }
 });
 

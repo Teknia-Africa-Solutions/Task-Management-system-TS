@@ -12,9 +12,14 @@ const pool = createPool();
 router.get("/", authMiddleware, requireRole("SuperAdmin", "Admin"), async (req, res) => {
   try {
     const [notifications] = await pool.query(
-      `SELECT id, type, title, description, is_read, created_at
-       FROM notifications
-       ORDER BY created_at DESC`
+      `SELECT n.id, n.type, n.title, n.message,
+              n.related_task_id, n.related_project_id,
+              n.is_read, n.created_at,
+              u.name AS user_name
+       FROM notifications n
+       LEFT JOIN users u ON n.user_id = u.id
+       ORDER BY n.created_at DESC
+       LIMIT 200`
     );
     res.json(notifications);
   } catch (err) {
