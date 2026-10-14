@@ -815,7 +815,7 @@ const renderAddTaskModal = () => (
 );
     case 'projects': return (
   <Projects
-    projects={projects}
+    isMobile={isMobile}
     searchTerm={searchTerm}
     onCreate={() => setIsAddProjectModalOpen(true)}
     onDelete={(id) => {
@@ -824,6 +824,7 @@ const renderAddTaskModal = () => (
     }}
   />
 );
+
      case 'tasks': return (
   <Tasks
     tasks={tasks}
