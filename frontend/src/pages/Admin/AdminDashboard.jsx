@@ -800,19 +800,11 @@ const renderAddTaskModal = () => (
 
   case 'teams': return (
   <Teams
-    teams={teams}
-    stats={stats}
-    isMobile={isMobile}   
+    isMobile={isMobile}
     searchTerm={searchTerm}
-    selectedTeam={selectedTeam}
-    setSelectedTeam={setSelectedTeam}
-    onCreate={() => setIsAddTeamModalOpen(true)}
-    onDelete={(id) => {
-      setConfirmAction({ type: 'deleteTeam', id });
-      setIsConfirmModalOpen(true);
-    }}
   />
 );
+
     case 'projects': return (
   <Projects
     isMobile={isMobile}
@@ -860,14 +852,8 @@ const renderAddTaskModal = () => (
   <Notifications isMobile={isMobile} />
 );
 
-    case 'reports': return (
-  <Reports
-    tasks={tasks}
-    isMobile={isMobile}   
-    onExportCSV={handleExportCSV}
-    onExportPDF={handleExportPDF}
-    onToast={showToast}
-  />
+   case 'reports': return (
+  <Reports isMobile={isMobile} />
 );
       
       case 'audit': return <AuditLogs searchTerm={searchTerm} />;

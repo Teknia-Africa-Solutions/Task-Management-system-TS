@@ -1,132 +1,182 @@
 // frontend/src/pages/Admin/Teams.jsx
 
-import React from 'react';
-import { getStatusBadge } from '../../utils/badges';
+import React, { useState, useEffect } from 'react';
+import { adminApi } from '../../services/adminApi';
 
-const Teams = ({
-  teams,
-  stats,
-  isMobile,
-  searchTerm,
-  selectedTeam,
-  setSelectedTeam,
-  onCreate,
-  onDelete,
-}) => {
+const Teams = ({ isMobile, searchTerm }) => {
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    adminApi
+      .getTeams()
+      .then((data) => {
+        setTeams(data);
+        setError(null);
+      })
+      .catch((err) => {
+        console.error('Failed to load teams:', err);
+        setError(err.message);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   const filteredTeams = teams.filter((t) =>
-    t.name.toLowerCase().includes(searchTerm.toLowerCase())
+    (t.project_name || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (loading) {
+    return (
+      <div style={{ padding: '60px', textAlign: 'center', color: '#6B7280' }}>
+        <p>Loading teams...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: '60px', textAlign: 'center', color: '#EF4444' }}>
+        <p><strong>Error:</strong> {error}</p>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ padding: '16px 24px 24px 24px' }}>
-      {/* Summary Cards */}
-<div style={{ 
-  display: 'grid', 
-  gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', 
-  gap: '12px', 
-  marginBottom: '20px' 
-}}>
-        <div style={{ background: 'white', borderRadius: '10px', padding: '14px 16px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
-          <p style={{ fontSize: '10px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.3px', margin: 0 }}>Total Teams</p>
-          <p style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', margin: '2px 0 0 0' }}>{stats.totalTeams}</p>
-        </div>
-        <div style={{ background: 'white', borderRadius: '10px', padding: '14px 16px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
-          <p style={{ fontSize: '10px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.3px', margin: 0 }}>Active Teams</p>
-          <p style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', margin: '2px 0 0 0' }}>{stats.activeTeams}</p>
-        </div>
-        <div style={{ background: 'white', borderRadius: '10px', padding: '14px 16px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
-          <p style={{ fontSize: '10px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.3px', margin: 0 }}>Total Members</p>
-          <p style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', margin: '2px 0 0 0' }}>{stats.totalMembers}</p>
-        </div>
-        <div style={{ background: 'white', borderRadius: '10px', padding: '14px 16px', border: '1px solid #E8F4E9', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
-          <p style={{ fontSize: '10px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.3px', margin: 0 }}>Avg Workload</p>
-          <p style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', margin: '2px 0 0 0' }}>{stats.avgWorkload}%</p>
-        </div>
+    <div style={{ padding: isMobile ? '12px' : '16px 24px 24px 24px', overflowX: 'hidden' }}>
+      {/* Info banner */}
+      <div
+        style={{
+          background: '#F8FAF8',
+          border: '1px solid #E8F4E9',
+          borderRadius: '10px',
+          padding: '12px 16px',
+          marginBottom: '20px',
+          fontSize: '13px',
+          color: '#6B7280',
+        }}
+      >
+        Teams are project-based. Each project's members are shown below.
       </div>
 
-      {/* Controls */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', border: '1px solid #E8F4E9', borderRadius: '8px', padding: '8px 14px', flex: '1', minWidth: '200px' }}>
-          <span style={{ color: '#6B7280', fontSize: '14px' }}>🔍</span>
-          <input
-            type="text"
-            placeholder="Search teams..."
-            style={{ border: 'none', outline: 'none', flex: 1, fontSize: '13px', background: 'transparent', color: '#1F2937' }}
-            value={searchTerm}
-            readOnly
-          />
-        </div>
-        <button
-          onClick={onCreate}
-          style={{ padding: '8px 20px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '500', cursor: 'pointer', fontSize: '13px' }}
+      {filteredTeams.length === 0 ? (
+        <div
+          style={{
+            background: 'white',
+            borderRadius: '12px',
+            padding: '60px',
+            textAlign: 'center',
+            color: '#6B7280',
+            border: '1px solid #E8F4E9',
+          }}
         >
-          + Create Team
-        </button>
-      </div>
-
-      {/* Team Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-        {filteredTeams.map((team) => (
-          <div key={team.id} style={{ background: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8F4E9' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-              <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#1F2937', margin: 0 }}>{team.name}</h4>
-              <span className={getStatusBadge(team.status)}>{team.status}</span>
-            </div>
-            <p style={{ fontSize: '13px', color: '#6B7280', marginBottom: '12px' }}>{team.description}</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#6B7280' }}>
-              <div><span style={{ fontWeight: '500', color: '#1F2937' }}>Manager:</span> {team.manager}</div>
-              <div><span style={{ fontWeight: '500', color: '#1F2937' }}>Members:</span> {team.members.length}</div>
-              <div><span style={{ fontWeight: '500', color: '#1F2937' }}>Active Tasks:</span> {team.activeTasks}</div>
-              <div><span style={{ fontWeight: '500', color: '#1F2937' }}>Completed:</span> {team.completedTasks}</div>
-            </div>
-            <div style={{ marginTop: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#6B7280' }}>Workload</span>
-                <span style={{ fontWeight: '600', color: team.workload > 70 ? '#F59E0B' : '#05620C' }}>{team.workload}%</span>
+          <p>No teams found.</p>
+        </div>
+      ) : (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '16px',
+          }}
+        >
+          {filteredTeams.map((team) => (
+            <div
+              key={team.project_id}
+              style={{
+                background: 'white',
+                borderRadius: '12px',
+                padding: '20px',
+                border: '1px solid #E8F4E9',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+              }}
+            >
+              {/* Header */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #E8F4E9' }}>
+                <span
+                  style={{
+                    width: '14px',
+                    height: '14px',
+                    borderRadius: '50%',
+                    background: team.color || '#05620C',
+                    flexShrink: 0,
+                  }}
+                />
+                <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#1F2937', margin: 0 }}>
+                  {team.project_name}
+                </h4>
+                <span
+                  style={{
+                    marginLeft: 'auto',
+                    padding: '2px 10px',
+                    borderRadius: '12px',
+                    background: '#E8F4E9',
+                    color: '#05620C',
+                    fontSize: '11px',
+                    fontWeight: '600',
+                  }}
+                >
+                  {team.members.length} member{team.members.length !== 1 ? 's' : ''}
+                </span>
               </div>
-              <div style={{ width: '100%', height: '6px', backgroundColor: '#E8F4E9', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ width: `${team.workload}%`, height: '100%', backgroundColor: team.workload > 70 ? '#F59E0B' : '#05620C', borderRadius: '4px' }}></div>
+
+              {/* Members List */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {team.members.map((member) => (
+                  <div
+                    key={member.id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '8px 12px',
+                      background: '#F8FAF8',
+                      borderRadius: '8px',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        background: member.role === 'SuperAdmin' || member.role === 'Admin' ? '#FF883E' : '#05620C',
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {member.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: '13px', fontWeight: '500', color: '#1F2937', margin: 0 }}>
+                        {member.name}
+                      </p>
+                      <p style={{ fontSize: '11px', color: '#6B7280', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {member.email}
+                      </p>
+                    </div>
+                    <span
+                      style={{
+                        padding: '2px 8px',
+                        borderRadius: '10px',
+                        fontSize: '10px',
+                        fontWeight: '600',
+                        background: member.role === 'SuperAdmin' ? '#FEF3C7' : member.role === 'Admin' ? '#DBEAFE' : '#E8F4E9',
+                        color: member.role === 'SuperAdmin' ? '#92400E' : member.role === 'Admin' ? '#1E40AF' : '#05620C',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {member.role}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-              <button
-                onClick={() => setSelectedTeam(team)}
-                style={{ padding: '6px 16px', background: '#05620C', color: 'white', border: 'none', borderRadius: '6px', fontSize: '12px', cursor: 'pointer' }}
-              >
-                View Details
-              </button>
-              <button
-                onClick={() => onDelete(team.id)}
-                style={{ padding: '6px 16px', background: 'transparent', border: '1px solid #E8F4E9', borderRadius: '6px', fontSize: '12px', cursor: 'pointer', color: '#EF4444' }}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Team Details Modal */}
-      {selectedTeam && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-          <div style={{ background: 'white', borderRadius: '12px', padding: '24px', maxWidth: '500px', width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1F2937', margin: 0 }}>{selectedTeam.name}</h3>
-              <button onClick={() => setSelectedTeam(null)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}>✕</button>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <p><strong>Description:</strong> {selectedTeam.description}</p>
-              <p><strong>Manager:</strong> {selectedTeam.manager}</p>
-              <p><strong>Members:</strong> {selectedTeam.members.length}</p>
-              <p><strong>Active Tasks:</strong> {selectedTeam.activeTasks}</p>
-              <p><strong>Completed Tasks:</strong> {selectedTeam.completedTasks}</p>
-              <p><strong>Workload:</strong> {selectedTeam.workload}%</p>
-              <p><strong>Status:</strong> {selectedTeam.status}</p>
-            </div>
-            <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
-              <button onClick={() => setSelectedTeam(null)} style={{ padding: '8px 20px', background: '#05620C', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Close</button>
-            </div>
-          </div>
+          ))}
         </div>
       )}
     </div>
