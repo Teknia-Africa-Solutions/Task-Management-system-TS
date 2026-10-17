@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
-import { Paperclip, Send } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Paperclip, Send, Plus } from "lucide-react";
 import { getConversations, getMessages, sendMessage } from "../../services/messageService";
 import { useSocket } from "../../context/SocketContext";
 import { useAuth } from "../../context/AuthContext";
+import NewConversationModal from "./components/NewConversationModal";
 
 function formatTime(dateString) {
   return new Date(dateString).toLocaleTimeString("en-US", {
@@ -22,10 +23,10 @@ export default function Messages() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showThreadOnMobile, setShowThreadOnMobile] = useState(false);
+  const [showNewConvoModal, setShowNewConvoModal] = useState(false);
 
   const activeConvo = conversations.find((c) => c.id === activeConvoId);
 
-  // Load the conversation list once, on mount
   useEffect(() => {
     async function loadConversations() {
       try {
@@ -41,7 +42,6 @@ export default function Messages() {
     loadConversations();
   }, []);
 
-  // Load messages whenever the active conversation changes
   useEffect(() => {
     if (!activeConvoId) return;
     async function loadMessages() {
@@ -55,7 +55,6 @@ export default function Messages() {
     loadMessages();
   }, [activeConvoId]);
 
-  // Listen for real-time incoming messages
   useEffect(() => {
     if (!socket) return;
 
@@ -63,7 +62,6 @@ export default function Messages() {
       if (message.conversation_id === activeConvoId) {
         setMessages((prev) => [...prev, message]);
       }
-      // Update the conversation list preview regardless of which one is open
       setConversations((prev) =>
         prev.map((c) =>
           c.id === message.conversation_id
@@ -95,12 +93,38 @@ export default function Messages() {
     setShowThreadOnMobile(true);
   };
 
+  const handleConversationStarted = async (conversationId) => {
+    try {
+      const data = await getConversations();
+      setConversations(data);
+      openConversation(conversationId);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   if (loading) {
     return <p className="text-sm text-[#6B7280]">Loading conversations...</p>;
   }
 
   if (conversations.length === 0) {
-    return <p className="text-sm text-[#6B7280] text-center py-10">No conversations yet.</p>;
+    return (
+      <div className="bg-white border border-black/5 rounded-xl shadow-sm p-10 text-center">
+        <p className="text-sm text-[#6B7280] mb-4">No conversations yet.</p>
+        <button
+          onClick={() => setShowNewConvoModal(true)}
+          className="px-4 py-2 text-sm font-semibold text-white bg-[#05620C] hover:bg-[#034A09] rounded-lg transition"
+        >
+          Start a conversation
+        </button>
+        {showNewConvoModal && (
+          <NewConversationModal
+            onClose={() => setShowNewConvoModal(false)}
+            onStarted={handleConversationStarted}
+          />
+        )}
+      </div>
+    );
   }
 
   return (
@@ -110,9 +134,17 @@ export default function Messages() {
           showThreadOnMobile ? "hidden lg:flex" : "flex"
         }`}
       >
-        <div className="px-5 py-4 border-b border-black/5">
+        <div className="px-5 py-4 border-b border-black/5 flex items-center justify-between">
           <h2 className="font-semibold text-[#1F2937]">Messages</h2>
+          <button
+            onClick={() => setShowNewConvoModal(true)}
+            className="p-1.5 rounded-lg text-[#05620C] hover:bg-[#E8F4E9] transition"
+            aria-label="New message"
+          >
+            <Plus size={18} />
+          </button>
         </div>
+
         {conversations.map((c) => (
           <button
             key={c.id}
@@ -186,6 +218,13 @@ export default function Messages() {
           </>
         )}
       </div>
+
+      {showNewConvoModal && (
+        <NewConversationModal
+          onClose={() => setShowNewConvoModal(false)}
+          onStarted={handleConversationStarted}
+        />
+      )}
     </div>
   );
 }

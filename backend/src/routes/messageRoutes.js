@@ -57,6 +57,58 @@ router.get("/:id/messages", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Failed to load messages." });
   }
 });
+// GET /api/conversations/users — everyone except yourself, for the "start new chat" picker
+router.get("/users", authMiddleware, async (req, res) => {
+  try {
+    const [users] = await pool.query(
+      "SELECT id, name, email FROM users WHERE id != ? AND is_active = TRUE ORDER BY name ASC",
+      [req.user.id]
+    );
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load users." });
+  }
+});
+
+// POST /api/conversations/start — find an existing 1-on-1 conversation with this user, or create one
+router.post("/start", authMiddleware, async (req, res) => {
+  try {
+    const { otherUserId } = req.body;
+
+    if (!otherUserId) {
+      return res.status(400).json({ message: "otherUserId is required." });
+    }
+
+    // Check if a conversation between exactly these two people already exists
+    const [existing] = await pool.query(
+      `SELECT c.id
+       FROM conversations c
+       JOIN conversation_participants me ON me.conversation_id = c.id AND me.user_id = ?
+       JOIN conversation_participants other ON other.conversation_id = c.id AND other.user_id = ?
+       LIMIT 1`,
+      [req.user.id, otherUserId]
+    );
+
+    if (existing.length > 0) {
+      return res.json({ conversationId: existing[0].id });
+    }
+
+    // None found — create a new conversation and add both participants
+    const [convoResult] = await pool.query("INSERT INTO conversations () VALUES ()");
+    const conversationId = convoResult.insertId;
+
+    await pool.query(
+      "INSERT INTO conversation_participants (conversation_id, user_id) VALUES (?, ?), (?, ?)",
+      [conversationId, req.user.id, conversationId, otherUserId]
+    );
+
+    res.status(201).json({ conversationId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to start conversation." });
+  }
+});
 
 // POST /api/conversations
 router.post("/:id/messages", authMiddleware, async (req, res) => {

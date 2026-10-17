@@ -24,3 +24,12 @@ export async function getProjectDetail(id) {
   if (!res.ok) throw new Error(data.message || "Failed to load project");
   return data;
 }
+  export async function getAllProjectsAdmin() {
+  const res = await fetch(`${API_URL}/projects/admin/all`, {
+    headers: authHeaders(),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to load projects");
+  return data;
+
+}

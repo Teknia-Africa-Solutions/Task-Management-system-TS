@@ -19,17 +19,34 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
+
+    const [[regSetting]] = await pool.query(
+      "SELECT `value` FROM settings WHERE `key` = 'allow_self_registration'"
+    );
+    if (regSetting?.value === "false") {
+      return res.status(403).json({ message: "Self-registration is currently disabled." });
+    }
+
     const [existing] = await pool.query("SELECT id FROM users WHERE email = ?", [email]);
     if (existing.length > 0) {
       return res.status(409).json({ message: "An account with this email already exists." });
     }
+    const [[roleSetting]] = await pool.query(
+      "SELECT `value` FROM settings WHERE `key` = 'default_signup_role'"
+    );
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await pool.query(
-      "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-      [name, email, hashedPassword, "Member"]
-    );
+const [[setting]] = await pool.query(
+  "SELECT `value` FROM settings WHERE `key` = 'default_signup_role'"
+);
+const defaultRole = setting?.value || "Member";
+
+await pool.query(
+  "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
+  [name, email, hashedPassword, defaultRole]
+);
 
     res.status(201).json({ message: "Account created successfully." });
   } catch (err) {
@@ -38,6 +55,8 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -45,18 +64,28 @@ router.post("/login", async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required." });
     }
+const [rows] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
+const user = rows[0];
 
-    const [rows] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
-    const user = rows[0];
+if (!user) {
+  return res.status(401).json({ message: "Invalid email or password." });
+}
 
-    if (!user) {
-      return res.status(401).json({ message: "Invalid email or password." });
-    }
+if (!user.is_active) {
+  return res.status(403).json({ message: "This account has been deactivated." });
+}
 
-    const passwordMatches = await bcrypt.compare(password, user.password);
+const passwordMatches = await bcrypt.compare(password, user.password);
     if (!passwordMatches) {
       return res.status(401).json({ message: "Invalid email or password." });
     }
+
+const [[maintenanceSetting]] = await pool.query(
+      "SELECT `value` FROM settings WHERE `key` = 'maintenance_mode'"
+    );
+    if (maintenanceSetting?.value === "true" && user.role !== "SuperAdmin") {
+      return res.status(503).json({ message: "The system is currently under maintenance. Please try again later." });
+  }
 
     const token = jwt.sign(
       { id: user.id, role: user.role },
