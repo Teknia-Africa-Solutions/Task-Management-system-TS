@@ -11,8 +11,7 @@ import {
 } from "recharts";
 import { getSuperAdminReportSummary } from "../../services/reportService";
 
-// On small screens each card is a compact row (label left, value right) to save height.
-// From md up it becomes the stacked card.
+
 function StatCard({ label, value }) {
   return (
     <div className="bg-white border border-black/5 rounded-xl shadow-sm p-4 sm:p-5 flex items-center justify-between gap-3 md:block">
@@ -61,7 +60,6 @@ export default function Reports() {
   ];
 
   return (
-    // max-w-7xl stops the page stretching edge to edge on very wide monitors
     <div className="w-full max-w-7xl mx-auto space-y-4 sm:space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-5">
         {stats.map((s) => (
@@ -79,7 +77,6 @@ export default function Reports() {
             No task activity yet to show a trend.
           </p>
         ) : (
-          // The height steps up with the screen. min-w-0 lets the chart shrink inside flex/grid parents.
           <div className="h-60 sm:h-72 lg:h-80 min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trend} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
