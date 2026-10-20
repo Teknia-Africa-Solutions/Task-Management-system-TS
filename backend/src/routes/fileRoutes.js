@@ -60,18 +60,32 @@ router.post("/:projectId", authMiddleware, upload.single("file"), async (req, re
       return res.status(400).json({ message: "No file was uploaded." });
     }
 
-    const [result] = await pool.query(
-      `INSERT INTO files (name, project_id, stored_filename, mime_type, uploaded_by, size_bytes)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [req.file.originalname, projectId, req.file.filename, req.file.mimetype, req.user.id, req.file.size]
-    );
+   const [result] = await pool.query(
+  `INSERT INTO files (
+      name,
+      original_name,
+      file_path,
+      project_id,
+      stored_filename,
+      mime_type,
+      uploaded_by,
+      size_bytes
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+  [
+    req.file.filename,
+    req.file.originalname,
+    req.file.path,
+    projectId,
+    req.file.filename,
+    req.file.mimetype,
+    req.user.id,
+    req.file.size,
+  ]
+);
 
-    res.status(201).json({
-      id: result.insertId,
-      name: req.file.originalname,
-      mime_type: req.file.mimetype,
-    });
-  } catch (err) {
+    res.status(201).json({ message: "File uploaded successfully.", fileId: result.insertId });
+  } catch (err) { 
     console.error(err);
     res.status(500).json({ message: "Failed to upload file." });
   }

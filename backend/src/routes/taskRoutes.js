@@ -24,6 +24,8 @@ router.get("/", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Failed to load tasks." });
   }
 });
+
+
 // PATCH /api/tasks/
 router.patch("/:id", authMiddleware, async (req, res) => {
   try {
@@ -42,7 +44,6 @@ router.patch("/:id", authMiddleware, async (req, res) => {
       fieldsToUpdate.push("status = ?");
       values.push(status);
 
-      // Automatically stamp completed_at when marked Done, clear it otherwise
       fieldsToUpdate.push("completed_at = ?");
       values.push(status === "Done" ? new Date() : null);
     }
