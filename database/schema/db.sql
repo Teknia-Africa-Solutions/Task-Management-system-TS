@@ -448,3 +448,18 @@ CREATE TABLE task_watchers (
         REFERENCES users(id)
         ON DELETE CASCADE
 );
+
+
+-- =========================================================
+-- SYSTEM SETTINGS
+-- =========================================================
+
+CREATE TABLE settings (
+    `key` VARCHAR(100) PRIMARY KEY,
+    `value` VARCHAR(255) NOT NULL
+);
+
+INSERT INTO settings (`key`, `value`) VALUES
+    ('default_signup_role', 'Member'),
+    ('allow_self_registration', 'true'),
+    ('maintenance_mode', 'false');
